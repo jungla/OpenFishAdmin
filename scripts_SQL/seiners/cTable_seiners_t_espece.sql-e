@@ -1,0 +1,7 @@
+DROP TABLE IF EXISTS peche_thon.t_espece;
+
+CREATE TABLE peche_thon.t_espece (
+   id integer,
+   espece varchar(100),
+   PRIMARY KEY(id)
+);

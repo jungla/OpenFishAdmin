@@ -1,0 +1,7 @@
+DROP TABLE IF EXISTS seiners.t_espece;
+
+CREATE TABLE seiners.t_espece (
+   id integer,
+   espece varchar(100),
+   PRIMARY KEY(id)
+);

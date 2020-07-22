@@ -1,0 +1,51 @@
+import psycopg2
+import numpy as np
+import csv
+import peche_sql
+
+## Connect to an existing database
+conn = psycopg2.connect("dbname=geospatialdb user=postgres")
+#
+## Open a cursor to perform database operations
+cur = conn.cursor()
+
+# read CSV data to be uploaded
+years = ['2016','2017']
+
+file_t_espece = '/Users/jeanmensa/Google_Drive/Gabon_Bleu/_database/CSV_data/seiners/seiners_T_ESPECE.csv_out'
+
+for year in years:
+
+ path = '/Users/jeanmensa/Google_Drive/Gabon_Bleu/_database/CSV_data/seiners/'+year+'/'
+
+ filename = 'seiners_PRISE_ACCESS_TAILLE.csv_out'
+
+ with open(path+filename, 'rb') as csvfile:
+  spamreader = csv.reader(csvfile, delimiter=',', quotechar='"')
+  spamreader.next()
+
+  for lines in spamreader:
+   for i in range(len(lines)):
+    if lines[i] == '': lines[i]=None 
+    if lines[i] == '\n': lines[i]=None 
+    if lines[i] == '-9999': lines[i]=None
+    if lines[i] == 'NA': lines[i]=None
+    if lines[i] == 'NaN': lines[i]=None
+
+   id_route = peche_sql.findUUID_route(lines[0],lines[2],lines[3],conn) 
+ 
+  # replace species from table
+ 
+   espece_id = peche_sql.findID_espece(lines[4],file_t_espece)
+
+   t_measure = peche_sql.convertID('/Users/jeanmensa/Google_Drive/Gabon_Bleu/_database/CSV_data/seiners/seiners_T_MEASURE_CONV.csv',lines[5])
+  
+    ## Execute a command: this creates a new table
+   query = "INSERT INTO seiners.prise_access_taille(id_route, username, maree, n_cale, n_route, l_route, t_espece, t_measure, taille, poids, t_sexe, t_capture, t_relache, photo, remarque) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+  
+   print query
+   cur.execute(query, (id_route,'jmensa',lines[0],lines[1],lines[2],lines[3],espece_id,lines[5],lines[6],lines[7],lines[8],lines[9],lines[10],lines[11],lines[12]))
+   conn.commit()
+ 
+cur.close()
+conn.close()

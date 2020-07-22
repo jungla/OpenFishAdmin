@@ -1,0 +1,17 @@
+DROP TABLE IF EXISTS iccat.maree;
+CREATE TABLE iccat.maree(
+   id uuid DEFAULT uuid_generate_v4 (),
+   datetime timestamp DEFAULT now(),
+   username varchar(100),
+   id_navire uuid, 
+   country varchar(100),
+   year integer,
+   port_d varchar(100),
+   port_a varchar(100),
+   date_d date,
+   date_a date,
+   ndays integer,
+   PRIMARY KEY(id)
+);
+
+--CREATE INDEX trgm_idx_logbook_navire ON iccat.maree USING gist (navire gist_trgm_ops);

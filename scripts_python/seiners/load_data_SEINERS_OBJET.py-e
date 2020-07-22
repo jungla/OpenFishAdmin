@@ -1,0 +1,50 @@
+import psycopg2
+import numpy as np
+import peche_sql
+import csv
+
+## Connect to an existing database
+conn = psycopg2.connect("dbname=geospatialdb user=postgres")
+#
+## Open a cursor to perform database operations
+cur = conn.cursor()
+
+# read CSV data to be uploaded
+
+# read CSV data to be uploaded
+years = ['2016','2017']
+
+for year in years:
+ path = '/Users/jeanmensa/Google_Drive/Gabon_Bleu/_database/CSV_data/seiners/'+year+'/'
+ filename = 'seiners_OBJET.csv_out'
+
+ with open(path+filename, 'rb') as csvfile:
+  spamreader = csv.reader(csvfile, delimiter=',', quotechar='"')
+  spamreader.next()
+ 
+  for lines in spamreader:
+  
+   # data formatting
+   for i in range(len(lines)):
+    if lines[i] == '-9999': lines[i] = None 
+    if lines[i] == 'NA': lines[i] = None 
+    if lines[i] == '': lines[i] = None 
+  # navire, zee, n_objet, n_route, l_route, t_objet, type_balise, code_balise, t_operation, t_peche, t_appartenance, t_devenir, remarquqe
+
+   id_route = peche_sql.findUUID_route(lines[0],lines[3],lines[4],conn)
+
+   t_objet = peche_sql.convertID('/Users/jeanmensa/Google_Drive/Gabon_Bleu/_database/CSV_data/seiners/seiners_T_OBJET_CONV.csv',lines[5])
+   t_operation = peche_sql.convertID('/Users/jeanmensa/Google_Drive/Gabon_Bleu/_database/CSV_data/seiners/seiners_T_OPERATION_CONV.csv',lines[8])
+   t_appartenance = peche_sql.convertID('/Users/jeanmensa/Google_Drive/Gabon_Bleu/_database/CSV_data/seiners/seiners_T_APPARTENANCE_CONV.csv',lines[9])
+   t_devenir = peche_sql.convertID('/Users/jeanmensa/Google_Drive/Gabon_Bleu/_database/CSV_data/seiners/seiners_T_DEVENIR_CONV.csv',lines[10])
+
+  
+    ## Execute a command: this creates a new table
+   query = "INSERT INTO seiners.objet (id_route, username, maree, t_zee, n_objet, n_route, l_route, t_objet, type_balise, code_balise, t_operation, t_appartenance, t_devenir, remarque) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
+  
+   print query
+   cur.execute(query, (id_route,'jeanmensa',lines[0],lines[1],lines[2],lines[3],lines[4],t_objet,lines[6],lines[7],t_operation,t_appartenance,t_devenir,lines[11]))
+   conn.commit()
+
+cur.close()
+conn.close()

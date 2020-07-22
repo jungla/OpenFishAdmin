@@ -1,0 +1,85 @@
+import csv
+import datetime
+import numpy as np
+import psycopg2
+
+filename = "./positions.csv"
+
+## Connect to an existing database
+conn = psycopg2.connect("dbname=geospatialdb user=postgres")
+## Open a cursor to perform database operations
+cur = conn.cursor()
+
+# list of names. We can start with a given list of names...
+
+pirogues = ['2782','2784','2785','2786','2787','2788']
+
+with open(filename, 'rb') as csvfile:
+ spamreader = csv.reader(csvfile, delimiter=',', quotechar='|')
+ spamreader.next()
+
+ date_t = [] 
+ name_t = []
+ lon_t = []
+ lat_t = []
+
+ for new_p in spamreader:
+#  date_t.append(new_p[0])
+#  name_t.append(new_p[1])
+#  lon_t.append(new_p[4])
+#  lat_t.append(new_p[3])
+
+  for i in range(len(new_p)):
+   if new_p[i] == '': new_p[i] = None
+   if new_p[i] == ' ': new_p[i] = None
+   if new_p[i] == '\n': new_p[i] = None
+
+  # for each new_p in file, read from DB last entry for each pirogue and decide if lines need to be added
+  query = "SELECT * FROM artisanal.pelagic_points WHERE name = '"+new_p[1]+"' ORDER BY date_t DESC LIMIT 1"
+
+  cur.execute(query)
+
+  old_p = cur.fetchall()
+
+  # if new pirogue add record
+
+  if len(old_p) == 0 or old_p[0][2] < datetime.datetime.strptime(new_p[0],'%Y-%m-%d %H:%M:%S'):
+   query = "INSERT INTO artisanal.pelagic_points (date_t, name, speed, range, heading, location) VALUES (%s, %s, %s, %s, %s, ST_GeomFromText('POINT(%s %s)',4326))"
+   cur.execute(query,(new_p[0],new_p[1],new_p[5],new_p[6],new_p[7],float(new_p[4]),float(new_p[3])))
+   print query
+   if len(old_p) > 0:
+    print old_p[0][2]
+    print datetime.datetime.strptime(new_p[0],'%Y-%m-%d %H:%M:%S')
+  #new_p[1],new_p[2], new_p[3], new_p[4]
+
+conn.commit()
+cur.close()
+conn.close()
+
+# lon_t = np.asarray(lon_t)
+# lat_t = np.asarray(lat_t)
+# name_t = np.asarray(name_t)
+# date_t = np.asarray(date_t)
+#
+# name_n = []
+# date_n = []
+# lon_n = []
+# lat_n = []
+
+#  f.write(name+','+date_t[name_t == name][-1]+','+lon_t[name_t == name][-1]+','+lat_t[name_t == name][-1]+'\n')
+
+
+
+#query = "INSERT INTO artisanal.carte (username, id_fisherman, t_site, payment, receipt, date_d, date_f, id_license, active) VALUES (%s, %s, %s, %s, %s
+#, %s, %s, %s, %s)"
+#print query
+#cur.execute(query,('jean', id_fisherman, t_site, payment, receipt, date_d, date_f, id_license,'TRUE'))
+#
+#
+#   id uuid DEFAULT uuid_generate_v4 (),
+#   datetime timestamp DEFAULT now(),
+#   datetime_t timestamp,
+#   name varchar(100),
+#
+#
+#

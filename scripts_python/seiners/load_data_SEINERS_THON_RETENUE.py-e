@@ -1,0 +1,48 @@
+import psycopg2
+import numpy as np
+import csv
+import peche_sql
+
+## Connect to an existing database
+conn = psycopg2.connect("dbname=geospatialdb user=postgres")
+#
+## Open a cursor to perform database operations
+cur = conn.cursor()
+
+# read CSV data to be uploaded
+years = ['2016','2017']
+
+for year in years:
+ path = '/Users/jeanmensa/Google_Drive/Gabon_Bleu/_database/CSV_data/seiners/'+year+'/'
+ filename = 'seiners_THON_RETENUE.csv_out'
+
+ with open(path+filename, 'rb') as csvfile:
+  spamreader = csv.reader(csvfile, delimiter=',', quotechar='"')
+  spamreader.next()
+
+  for lines in spamreader:
+   # data formatting
+   for i in range(len(lines)):
+    if lines[i] is not None:
+     if lines[i].strip() == 'NA': lines[i]=None
+     if lines[i] == '': lines[i]=None 
+     if lines[i] == ' ': lines[i]=None 
+     if lines[i] == '\n': lines[i]=None 
+     if lines[i] == '-9999': lines[i]=None
+     if lines[i] == 'NaN': lines[i]=None
+  
+   # round degree current
+   if lines[10]:
+    lines[10] = round(float(lines[10]))
+
+   id_route = peche_sql.findUUID_route(lines[0],lines[4],lines[5],conn)    
+  
+    ## Execute a command: this creates a new table
+   query = "INSERT INTO seiners.thon_retenue (id_route, username, maree, t_zee, n_calee, t_type, n_route, l_route, h_d, h_c, h_f, vitesse, direction, d_max, sonar, raison, t_espece, t_categorie, poids, cuve, remarque) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
+  
+   print query
+   cur.execute(query, (id_route,'jmensa',lines[0],lines[1],lines[2],lines[3],lines[4],lines[5],lines[6],lines[7],lines[8],lines[9],lines[10],lines[11],lines[12],lines[13],lines[14],lines[15],lines[16],lines[17],lines[18]))
+   conn.commit()
+ 
+cur.close()
+conn.close()
