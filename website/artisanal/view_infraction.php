@@ -208,7 +208,7 @@ if ($results[56] != ''and $results[55] != '') {
         }
       </script>
   <script async defer
-  src=\"https://maps.googleapis.com/maps/api/js?key=AIzaSyBI5MQWC4N5SgUXs989_7MTDkQghaiGUuA&callback=initMap\">
+  src=\"https://maps.googleapis.com/maps/api/js?key=&callback=initMap\">
   </script>";
 }
 ?>
