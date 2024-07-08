@@ -7,7 +7,7 @@ OpenFishAdmin is an open-source Content Management System for fishery data sets.
 Installation can be done via Python script as below. This will check system requirements and install a local version of the database and website.
 
 ```bash
-python install.py
+python init_all.py
 ```
 
 ## User and Developer Guide
