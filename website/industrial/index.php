@@ -1,7 +1,6 @@
 <?php
 require("../top_foot.inc.php");
 
-
 $_SESSION['where'][0] = 'industrial';
 $_SESSION['where'][1] = 'home';
 
@@ -79,13 +78,17 @@ $query = "SELECT date_p, username FROM vms.positions WHERE date_p IS NOT NULL OR
 $result = pg_fetch_row(pg_query($query));
 print "<tr><td><b>Position VMS:</b> <i>$result[0] - $result[1]</i></td></tr>";
 
-$query = "SELECT date_c, username FROM thon.lance WHERE date_c IS NOT NULL ORDER BY date_c DESC LIMIT 1";
+$query = "SELECT date_r, username FROM poisson.maree WHERE date_r IS NOT NULL ORDER BY date_r DESC LIMIT 1";
 $result = pg_fetch_row(pg_query($query));
-print "<tr><td><b>Logbook thoniers:</b> <i>$result[0] - $result[1]</i></td></tr>";
+print "<tr><td><b>Logbook poissonniers</b> <i>$result[0] - $result[1]</i></td></tr>";
 
 $query = "SELECT date_l, username FROM crevette.lance WHERE date_l IS NOT NULL ORDER BY date_l DESC LIMIT 1";
 $result = pg_fetch_row(pg_query($query));
 print "<tr><td><b>Logbook crevettiers</b> <i>$result[0] - $result[1]</i></td></tr>";
+
+$query = "SELECT date_c, username FROM thon.lance WHERE date_c IS NOT NULL ORDER BY date_c DESC LIMIT 1";
+$result = pg_fetch_row(pg_query($query));
+print "<tr><td><b>Logbook thoniers:</b> <i>$result[0] - $result[1]</i></td></tr>";
 
 $query = "SELECT date, username FROM seiners.route WHERE date IS NOT NULL ORDER BY date DESC LIMIT 1";
 $result = pg_fetch_row(pg_query($query));
@@ -137,8 +140,9 @@ print "</table>";
 <ul>
     <li>Donn&eacute;es de <a href="./industrial_records.php#1">p&ecirc;che au senne</a> collect&eacute;es via le <b>programme Observateurs</b></li>
     <li>Donn&eacute;es de <a href="./industrial_records.php#2">p&ecirc;che chalutier</a> collect&eacute;es via le <b>programme Observateurs</b></li>
-    <li>Donn&eacute;es de <a href="./industrial_records.php#3">p&ecirc;che thonier</a> collect&eacute;es <b>logbook capitaine</b></li>
-    <li>Donn&eacute;es de <a href="./industrial_records.php#4">p&ecirc;che crevettier</a> collect&eacute;es <b>logbook capitaine</b></li>
+    <li>Donn&eacute;es de <a href="./industrial_records.php#3">p&ecirc;che crevettier</a> collect&eacute;es <b>logbook capitaine</b></li>
+    <li>Donn&eacute;es de <a href="./industrial_records.php#4">p&ecirc;che poissonnier</a> collect&eacute;es <b>logbook capitaine</b></li>
+    <li>Donn&eacute;es de <a href="./industrial_records.php#5">p&ecirc;che thonier</a> collect&eacute;es <b>logbook capitaine</b></li>
 </ul>
 
 <h3>Donn&eacute;es THEMIS</h3>

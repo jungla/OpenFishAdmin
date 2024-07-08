@@ -1,0 +1,5 @@
+﻿0,Signataire,owner
+1,Administrateur,administrator
+2,Gestionnaire,manager
+3,Utilisateur,guest
+99,Utilisateur externe,external guest

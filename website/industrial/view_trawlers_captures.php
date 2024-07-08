@@ -16,9 +16,11 @@ if ($_GET['table'] != "") {$_SESSION['path'][1] = $_GET['table'];}
 
 $_SESSION['filter']['f_id_species'] = $_POST['f_id_species'];
 $_SESSION['filter']['f_s_maree'] = $_POST['f_s_maree'];
+$_SESSION['filter']['f_s_lance'] = $_POST['f_s_lance'];
 
 if ($_GET['f_id_species'] != "") {$_SESSION['filter']['f_id_species'] = $_GET['f_id_species'];}
 if ($_GET['f_s_maree'] != "") {$_SESSION['filter']['f_s_maree'] = $_GET['f_s_maree'];}
+if ($_GET['f_s_lance'] != "") {$_SESSION['filter']['f_s_lance'] = $_GET['f_s_lance'];}
 
 $source = $_SESSION['path'][0];
 $table = $_SESSION['path'][1];
@@ -129,12 +131,15 @@ if ($_GET['action'] == 'map') {
     <form method="post" action="<?php echo $self;?>?source=trawlers&table=captures&action=show" enctype="multipart/form-data">
     <fieldset>
 
-    <table id="no-border"><tr><td><b>Mar&eacute;e</b></td><td><b>Esp&eacute;c&eacute;</b></td></tr>
+    <table id="no-border"><tr><td><b>Mar&eacute;e</b></td><td><b>Lance</b></td><td><b>Esp&eacute;c&eacute;</b></td></tr>
     <tr>
-    <td>
-    <input type="text" size="20" name="f_s_maree" value="<?php echo $_SESSION['filter']['f_s_maree']?>"/>
-    </td>
-    <td>
+      <td>
+      <input type="text" size="10" name="f_s_maree" value="<?php echo $_SESSION['filter']['f_s_maree']?>"/>
+      </td>
+      <td>
+      <input type="text" size="5" name="f_s_lance" value="<?php echo $_SESSION['filter']['f_s_lance']?>"/>
+      </td>
+      <td>
     <select name="f_id_species" class="chosen-select" >
         <option value="id_species" selected="selected">Tous</option>
         <?php
@@ -171,13 +176,20 @@ if ($_GET['action'] == 'map') {
 
     // fetch data
 
-    if ($_SESSION['filter']['f_s_maree'] != "" OR $_SESSION['filter']['f_id_species'] != "" ) {
+    if ($_SESSION['filter']['f_s_maree'] != "" OR $_SESSION['filter']['f_s_lance'] != "" OR $_SESSION['filter']['f_id_species'] != "" ) {
 
         $_SESSION['start'] = 0;
 
+        if ($_SESSION['filter']['f_s_lance'] == '') {
+          $f_s_lance = 'lance';
+        } else {
+          $f_s_lance = $_SESSION['filter']['f_s_lance'];
+        }
+
         if ($_SESSION['filter']['f_s_maree'] != "") {
             $query = "SELECT count(captures.id) FROM trawlers.captures "
-                . "WHERE id_species=".$_SESSION['filter']['f_id_species']." ";
+                . "WHERE (id_species=".$_SESSION['filter']['f_id_species']." OR id_species IS NULL)"
+                . "AND trawlers.captures.lance = ".$f_s_lance." ";
 
             $pnum = pg_fetch_row(pg_query($query))[0];
 
@@ -185,19 +197,22 @@ if ($_GET['action'] == 'map') {
             . " coalesce(similarity(trawlers.captures.maree, '".$_SESSION['filter']['f_s_maree']."'),0) AS score"
             . " FROM trawlers.captures "
             . "LEFT JOIN fishery.species ON trawlers.captures.id_species = fishery.species.id "
-            . "WHERE id_species=".$_SESSION['filter']['f_id_species']." "
+            . "WHERE (id_species=".$_SESSION['filter']['f_id_species']." OR id_species IS NULL)"
+            . "AND trawlers.captures.lance = ".$f_s_lance." "
             . "ORDER BY score DESC, datetime DESC OFFSET $start LIMIT $step";
 
         } else {
 
             $query = "SELECT count(captures.id) FROM trawlers.captures "
-            . "WHERE id_species=".$_SESSION['filter']['f_id_species']." ";
+            . "WHERE id_species=".$_SESSION['filter']['f_id_species']." "
+            . "AND trawlers.captures.lance = ".$f_s_lance." ";
             $pnum = pg_fetch_row(pg_query($query))[0];
 
             $query = "SELECT captures.id, captures.datetime::date, captures.username, id_route, maree, lance, fishery.species.id, fishery.species.francaise, fishery.species.family, fishery.species.genus, fishery.species.species, poids, comment, n_ind "
             . " FROM trawlers.captures "
             . "LEFT JOIN fishery.species ON trawlers.captures.id_species = fishery.species.id "
-            . "WHERE id_species=".$_SESSION['filter']['f_id_species']." "
+            . "WHERE (id_species=".$_SESSION['filter']['f_id_species']." OR id_species IS NULL) "
+            . "AND trawlers.captures.lance = ".$f_s_lance." "
             . "ORDER BY captures.datetime DESC OFFSET $start LIMIT $step";
         }
     } else {
@@ -229,7 +244,7 @@ if ($_GET['action'] == 'map') {
     }
     print "</tr>";
     print "</table>";
-    pages($start,$step,$pnum,'./view_trawlers_captures.php?source=trawlers&table=captures&action=show&f_s_maree='.$_SESSION['filter']['f_s_maree'].'&f_id_species='.$_SESSION['filter']['f_id_species']);
+    pages($start,$step,$pnum,'./view_trawlers_captures.php?source=trawlers&table=captures&action=show&f_s_maree='.$_SESSION['filter']['f_s_maree'].'&f_s_lance='.$_SESSION['filter']['f_s_lance'].'&f_id_species='.$_SESSION['filter']['f_id_species']);
 
     $controllo = 1;
 

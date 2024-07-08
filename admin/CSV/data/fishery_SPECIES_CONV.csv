@@ -1,0 +1,262 @@
+old name,new name
+ALB/Alb.cep,ALB
+ARI/Ari,ARI
+BAL/Bal.can,
+BAL/Bal.cap,BAL/Can.mac
+BAL/Eph.gut,TET/Eph.gut
+BAT/Pem.elm,
+BOT/Bot.afr,
+BOT/Cha.lug,
+BOT/Cya.mic,BOT/Sya.mic
+BOT/Mon.mic,
+BOT/Monmic,
+BRA,BRM
+BRA/Bra.sem,BRM
+BRA/Hal.did,
+CAR/Boo.boo,Boo.boo
+CAR/Can.cry,CAR/Car.cry
+CAR/Can.hip,CAR/Car.hip
+CAR/Car.dec,CAR/Dec
+CAR/Dec.roc,
+CAR/Den.can,SPA/Den.can
+CAR/Den.gib,
+CAR/Dri.ap,CAR
+CAR/Ele.bip,CAR/Ela.bip
+CAR/Pag.car,
+CAR/Ser.cor,CAR/Ser.car
+CAR/Sol.dor,CAR/Sel.dor
+CARCar/hip,CAR/Car.hip
+CIT,CIT/Cit.lin
+CLU/Sar.mar,CLU/Sar.mad
+Coquillage Naticidae,ESC
+COR/Cor.equ,COR
+CRAB,CRAB
+CRAB/CAL,CRAB/Cal
+CYN/Aul.cad,CYN/Cyn.cad
+CYN/Cun.sen,CYN/Cyn.sen
+DRE/Dre.afr,DRE/Dre.afr
+ECH/Ech.rem,ECH
+Enc-mol,GER/Euc.mel
+EPH/Cha.gor,
+EPI,
+GER/Enc.mel,GER/Euc.mel
+GRA,
+HAE/Cyn.bro,CYN/Cyn.bro
+HAE/Dic.cun,SOL/Dic.cun
+HAE/Pom.ind,
+HOL/Hol.asc,
+IST/Mak.ind,IST/Mak.nig
+LUT/Luj.gor,LUT/Lut.gor
+MUL,MUL/Pse.pra
+MUR/Lyc.afe,MUR/Gym
+MURAENE,MUR
+MURAENI,MUR
+MURANI/Cha.vit,MUR/Cha.vit
+OMM,
+OPHIC,OPH
+OPHID,OPH
+PEN/Pen.Not,PEN/Pen.not
+PLA/Gram.gru,PLA/Gra.gru
+PSE,PSE/Pse.bel
+PSE/Pse.typ,SCI/Pse.typ
+RAC,RAC/Rac.can
+RAI/Das.mar,RAI/Das.mam
+RAI/Das.marg,RAI/Das.mag
+RAI/Das.marm,RAI/Das.mam
+RAI/Das.vio,RAI/Pte.vio
+RAI/Gym.mic,RAI/Gym
+RAI/Tor.tor,RAI/Tor
+REM,ECH
+REQ,SQL
+REQ,CAC
+REQ/Car,CAC/Car
+REQ/Car.alt,CAC/Car.alt
+REQ/Car.amb,CAC/Car.amb
+REQ/Car.bre,CAC/Car.bre
+REQ/Car.fal,CAC/Car.fal
+REQ/Car.leu,CAC/Car.leu
+REQ/Car.lim,CAC/Car.lim
+REQ/Car.lon,CAC/Car.lon
+REQ/Car.obs,CAC/Car.obs
+REQ/Car.plu,CAC/Car.plu
+REQ/Gal.cuv,CAC/Gal.cuv
+REQ/Isu.oxy,LAM/Isu.oxy
+REQ/Isu.pau,LAM/Isu.pau
+REQ/Lep.smi,LEP/Lep.smi
+REQ/Mus.mus,TRI/Mus.mus
+REQ/Neg.bre,CAC/Neg.bre
+REQ/Par.pec,HEM/Par.pec
+REQ/Pri.gla,CAC/Pri.gla
+REQ/Rhi.acu,CAC/Rhi.acu
+REQ/Sph,SPN/Sph
+REQ/Sph.lew,SPN/Sph.lew
+REQ/Sph.mok,SPN/Sph.mok
+REQ/Sph.zyg,SPN/Sph.zyg
+REQ/Squ,SQT/Squ
+REQ/Squ.acu,SQT/Squ.acu
+REQ/Squ.bla,SQL/Squ.bla
+REQ/Squ.meg,SQL/Squ.meg
+REQ/Squ.ocu,SQT/Squ.ocu
+SCI/Pse.gab,SCI/Pse
+SCI/Pte.pol,SCI/Pte.pel
+SCI/Umb.ron,SCI/Umb.rho
+SCOM/Dec.mac,CAR/Dec.mac
+SCOM/Eut,SCOM/Eut.all
+SCOM/Sco.jap,SCOM/Scom.jap
+SCOM/Sco.tri,SCOM/Scom.tri
+SCY,SCY/Scy.her
+SEP/Lol.vul,SEP
+SEP/Sep.ele,SEP
+SEP/Sep.elo,SEP
+SEP/Sep.off,SEP
+SEP/Sep.orb,SEP
+SEP/Sep.org,SEP
+SER/Ser.acr,SER/Ser.acc
+Sofia,POI
+SOL/Cyn.mon,CYN/Cyn.mon
+SOL/Dic.mon,SOL
+SOL/Din.cun,SOL/Dic.cun
+SOL/Mic.fre,
+SPA/Pag.ani,SPA
+SPA/Pag.car,SPA/Pag.cae
+SPA/Par.aur,SPA/Pag.aur
+SPA/Pom.per,
+SPA/Pra.aur,SPA/Pag.aur
+SQU/Squ.ocu,REQ/Squ.ocu
+SYN,SYO
+SYNG,SYG
+SYNO,SYO
+SYNO/Eph.gut,TET/Eph.gut
+SYNO/Lag.lae,TET/Lag.lae
+SYNO/Tra.myo,SYO/Tra.myo
+TET/Che.gab,
+TET/Lag.myo,
+TET/Mak,IST
+TRA/Tra.ara,
+TRA/Tra.fre,
+TRA/Tra.myo,SYO/Tra.myo
+TRA/Tra.pol,
+TRA/Tra.rad,
+TRA/Tra.tre,CAR/Tra.tre
+TRA/Tra.vip,
+TRIC,TRC
+TRIC/Ben.ten,TRC/Ben.ten
+TRIC/Tric.lep,TRC/Trc.lep
+TRICH/Trich.lep,TRC/Trc.lep
+TRIG,TRG
+TRIG/Che.gab,TRG/Che.gab
+TRIG/Che.las,TRG/Che.las
+TRIG/Chel.las,TRG/Che.las
+TRIG/Sym.nig,TRG
+TRIG/Tri.lyr,TRG/Trg.lyr
+TRIG/Trig.lyr,TRG/Trg.lyr
+URA/Ura.cad,
+ZEI/Zeu.fab,ZEI/Zen.fab
+,
+CRAB/Cal.mar,POR/Cal.mar
+CRAB/Cal.pal,POR/Cal.pal
+CRAB/Por.val,POR/Por.val
+CRAB/Por,POR
+,
+MURAENE/Cyn.fer,MUA/Cyn.fer
+,
+,
+,
+,
+,
+,
+,
+,
+Carcharinidae,CAC
+Baleine a boss,Baleine/Meg.nov
+Baleine a bosse,Baleine/Meg.nov
+Baleine sp,Baleine
+Baleines,Baleine
+Carcharchinus sp,CAC/Car
+Carcharhinidae,CAC
+Carcharhinus,CAC/Car
+Carcharhinus altimus,CAC/Car.alt
+Carcharhinus amboinensis,CAC/Car.amb
+Carcharhinus bevipinna,CAC/Car.bre
+Carcharhinus brevipinna,CAC/Car.bre
+Carcharhinus falciformis,CAC/Car.fal
+Carcharhinus leucas,CAC/Car.leu
+Carcharhinus limbatus,CAC/Car.lim
+Carcharhinus obscurus,CAC/Car.obs
+Carcharhinus sp,CAC/Car
+Carcharinus sp,CAC/Car
+Caretta caretta,TOR/Car.car
+Cetace,Baleine
+Chelonia mydas,TOR/Che.myd
+Dasyatidae,RAI/Das
+Dasyatis centroura,RAI/Das.cen
+Dasyatis margarita,RAI/Das.mag
+Dasyatis marginata,RAI/Das.mag
+Dasyatis marmorata,RAI/Das.mam
+Dasyatis pastanica,RAI/Das.pas
+Dasyatis pastinaca,RAI/Das.pas
+Dasyatis patinaca,RAI/Das.pas
+Dasyatis sp,RAI/Das
+Dauphin,DEL/Del.del
+Dauphin commun,DEL/Del.del
+Dauphin sp,DEL/Del.del
+Dauphins,DEL/Del.del
+Dauphins communs,DEL/Del.del
+Dauphins communs a long bec,DEL/Del.cap
+Dauphins sp,DEL/Del.del
+Delphinus capensis,DEL/Del.cap
+Dermochelys coriacea,TOR/Der.cor
+Eretmochelys imbricata,TOR/Ere.imb
+Galeocerdo cuvier,CAC/Gal.cuv
+Ginglymostoma cirratum,REG/Gin.cir
+Gymnura micrur,RAI/Gym.mic
+Gymnura micrura,RAI/Gym.mic
+Gymnura sp,RAI/Gym
+Gymnuridae,RAI/Gym
+Lepidochelys olivacea,TOR/Lep.oli
+Leptocharias smithii,LEP/Lep.smi
+Manta birostris,RAI/Man.bir
+Megaptera novaeangliae,Baleine/Meg.nov
+Mobulidae,RAI
+Mobula coilloti,RAI/Mob.coi
+Mobula rochebrunei,RAI/Mob.roc
+Mobula sp,RAI/Mob
+Mola mola,MOL/Mol.mol
+Mustelus mestelus,TRI/Mus.mus
+Mustelus Mustelus,TRI/Mus.mus
+Oxynotidae,REQ/Oxy
+Oxynotus centrina,REQ/Oxy.cen
+Paragaleus pectroralis,HEM/Par.pec
+Paragaleus pectoralis,HEM/Par.pec
+Paragalleus pectoralis,HEM/Par.pec
+Paragleus pectoralis,HEM/Par.pec
+Pteromylaeus bovinus,RAI/Pte.bov
+Raja miraletus,RAI/Raj.mir
+Raja sp,RAI/Raj
+Raja straeleni,RAI/Raj.str
+Raja straelini,RAI/Raj.str
+Rhinbatidae,RAI/Rhi
+Rhinobatidae,RAI/Rhi
+Rhinobatos albomaculatus,RAI/Rhi.alb
+Rhinobatos cemiculus,RAI/Rhi.cem
+Rhinobatos irvinei,RAI/Rhi.irv
+Rhinobatos rhinobatos,RAI/Rhi
+Rhinobatos sp,RAI/Rhi
+Rhinoptera marginata,RAI/Rhi.mar
+Rhizoprionodon acutus,CAC/Rhi.acu
+Scyliorhinus cervigoni,REQ/Scy.cer
+Scyliorhinus stellaris,REQ/Scy.ste
+Sphyraenidae,SPN
+Sphyrinidae,SPN
+Sphyrna lewini,SPN/Sph.lew
+Sphyrna sp,SPN
+Sphyrnidae,SPN
+Squalidae,SQL
+Squalus blainvillei,SQL/Squ.bla
+Squatina oculata,SQT/Squ.ocu
+Squatina oculata,SQT/Squ.acu
+Squatinidae,SQT
+Taenuira grabat,RAI/Tae.gra
+Taeniura grabata,RAI/Tae.gra
+Tortue sp,TOR
+Zanobatus schoenleinii,RAI/Zan.sch

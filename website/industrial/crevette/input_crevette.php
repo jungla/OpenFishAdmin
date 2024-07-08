@@ -2,7 +2,7 @@
 require("../../top_foot.inc.php");
 
 $_SESSION['where'][0] = 'industrial';
-$_SESSION['where'][1] = 'trawlers';
+$_SESSION['where'][1] = 'crevette';
 
 $username = $_SESSION['username'];
 
@@ -25,37 +25,69 @@ if ($table == 'lance') {
 
 if ($_POST['submit'] == "Enregistrer") {
 
-    $lon_deg_d = $_POST['lon_deg_d'];
-    $lat_deg_d = $_POST['lat_deg_d'];
-    $lon_min_d = $_POST['lon_min_d'];
-    $lat_min_d = $_POST['lat_min_d'];
+  $lon_deg_dms_d = htmlspecialchars($_POST['lon_deg_dms_d'],ENT_QUOTES);
+  $lat_deg_dms_d = htmlspecialchars($_POST['lat_deg_dms_d'],ENT_QUOTES);
+  $lon_min_dms_d = htmlspecialchars($_POST['lon_min_dms_d'],ENT_QUOTES);
+  $lat_min_dms_d = htmlspecialchars($_POST['lat_min_dms_d'],ENT_QUOTES);
+  $lon_sec_dms_d = htmlspecialchars($_POST['lon_sec_dms_d'],ENT_QUOTES);
+  $lat_sec_dms_d = htmlspecialchars($_POST['lat_sec_dms_d'],ENT_QUOTES);
+  $lon_deg_dm_d = htmlspecialchars($_POST['lon_deg_dm_d'],ENT_QUOTES);
+  $lat_deg_dm_d = htmlspecialchars($_POST['lat_deg_dm_d'],ENT_QUOTES);
+  $lon_min_dm_d = htmlspecialchars($_POST['lon_min_dm_d'],ENT_QUOTES);
+  $lat_min_dm_d = htmlspecialchars($_POST['lat_min_dm_d'],ENT_QUOTES);
+  $lon_deg_d_d = htmlspecialchars($_POST['lon_deg_d_d'],ENT_QUOTES);
+  $lat_deg_d_d = htmlspecialchars($_POST['lat_deg_d_d'],ENT_QUOTES);
 
-    $lon_d = $lon_deg_d+$lon_min_d/60;
-    $lat_d = $lat_deg_d+$lat_min_d/60;
+  if($_POST['t_coord_d'] == 'DDMMSS_d') {
+    $lon = $lon_deg_dms_d+$lon_min_dms_d/60+$lon_sec_dms_d/3600;
+    $lat = $lat_deg_dms_d+$lat_min_dms_d/60+$lon_sec_dms_d/3600;
+  } elseif ($_POST['t_coord_d'] == 'DDMM_d') {
+    $lon = $lon_deg_dm_d+$lon_min_dm_d/60;
+    $lat = $lat_deg_dm_d+$lat_min_dm_d/60;
+  } elseif ($_POST['t_coord_d'] == 'DD_d') {
+    $lon = $lon_deg_d_d;
+    $lat = $lat_deg_d_d;
+  }
 
-    if ($lon_d == "" OR $lat_d == "") {
-        $point_d = "NULL";
-    } else {
-        if ($_POST['NS'] == 'S') {$lat_d = -1*$lat_d;}
-        if ($_POST['EW'] == 'E') {$lon_d = -1*$lon_d;}
-        $point_d = "'POINT($lon_d $lat_d)'";
-    }
+  if ($lon == "" OR $lat == "") {
+      $point_d = "NULL";
+  } else {
+      if ($_POST['NS_d'] == 'S') {$lat = -1*$lat;}
+      if ($_POST['EO_d'] == 'O') {$lon = -1*$lon;}
+      $point_d = "ST_GeomFromText('POINT($lon $lat)',4326)";
+  }
 
-    $lon_feg_f = $_POST['lon_feg_f'];
-    $lat_feg_f = $_POST['lat_feg_f'];
-    $lon_min_f = $_POST['lon_min_f'];
-    $lat_min_f = $_POST['lat_min_f'];
+  $lon_deg_dms_f = htmlspecialchars($_POST['lon_deg_dms_f'],ENT_QUOTES);
+  $lat_deg_dms_f = htmlspecialchars($_POST['lat_deg_dms_f'],ENT_QUOTES);
+  $lon_min_dms_f = htmlspecialchars($_POST['lon_min_dms_f'],ENT_QUOTES);
+  $lat_min_dms_f = htmlspecialchars($_POST['lat_min_dms_f'],ENT_QUOTES);
+  $lon_sec_dms_f = htmlspecialchars($_POST['lon_sec_dms_f'],ENT_QUOTES);
+  $lat_sec_dms_f = htmlspecialchars($_POST['lat_sec_dms_f'],ENT_QUOTES);
+  $lon_deg_dm_f = htmlspecialchars($_POST['lon_deg_dm_f'],ENT_QUOTES);
+  $lat_deg_dm_f = htmlspecialchars($_POST['lat_deg_dm_f'],ENT_QUOTES);
+  $lon_min_dm_f = htmlspecialchars($_POST['lon_min_dm_f'],ENT_QUOTES);
+  $lat_min_dm_f = htmlspecialchars($_POST['lat_min_dm_f'],ENT_QUOTES);
+  $lon_deg_d_f = htmlspecialchars($_POST['lon_deg_d_f'],ENT_QUOTES);
+  $lat_deg_d_f = htmlspecialchars($_POST['lat_deg_d_f'],ENT_QUOTES);
 
-    $lon_f = $lon_feg_f+$lon_min_f/60;
-    $lat_f = $lat_feg_f+$lat_min_f/60;
+  if($_POST['t_coord_f'] == 'DDMMSS_f') {
+    $lon = $lon_deg_dms_f+$lon_min_dms_f/60+$lon_sec_dms_f/3600;
+    $lat = $lat_deg_dms_f+$lat_min_dms_f/60+$lon_sec_dms_f/3600;
+  } elseif ($_POST['t_coord_f'] == 'DDMM_f') {
+    $lon = $lon_deg_dm_f+$lon_min_dm_f/60;
+    $lat = $lat_deg_dm_f+$lat_min_dm_f/60;
+  } elseif ($_POST['t_coord_f'] == 'DD_f') {
+    $lon = $lon_deg_d_f;
+    $lat = $lat_deg_d_f;
+  }
 
-    if ($lon_f == "" OR $lat_f == "") {
-        $point_f = "NULL";
-    } else {
-        if ($_POST['NS'] == 'S') {$lat_f = -1*$lat_f;}
-        if ($_POST['EW'] == 'E') {$lon_f = -1*$lon_f;}
-        $point_f = "'POINT($lon_f $lat_f)'";
-    }
+  if ($lon == "" OR $lat == "") {
+      $point_f = "NULL";
+  } else {
+      if ($_POST['NS_f'] == 'S') {$lat = -1*$lat;}
+      if ($_POST['EO_f'] == 'O') {$lon = -1*$lon;}
+      $point_f = "ST_GeomFromText('POINT($lon $lat)',4326)";
+  }
 
     $id_navire = $_POST['id_navire'];
     $date_l = $_POST['date_l'];
@@ -74,7 +106,7 @@ if ($_POST['submit'] == "Enregistrer") {
                 . "VALUES ('$username', now(), '$id_navire', '$date_l', '$t_zone', '$lance', '$h_d', '$h_f', '$D_d', '$D_f', '$T_d', '$rejets', '"
                 .$_POST['c0_cre']."', '".$_POST['c1_cre']."', '".$_POST['c2_cre']."', '".$_POST['c3_cre']."', '"
                 .$_POST['c4_cre']."', '".$_POST['c5_cre']."', '".$_POST['c6_cre']."', '".$_POST['c7_cre']."', '"
-                .$_POST['c8_cre']."', '".$_POST['c_cre']."', '".$_POST['cc_cre']."', '".$_POST['o_cre']."', '".$_POST['v6_cre']."', ST_GeomFromText($point_d,4326), ST_GeomFromText($point_f,4326))";
+                .$_POST['c8_cre']."', '".$_POST['c_cre']."', '".$_POST['cc_cre']."', '".$_POST['o_cre']."', '".$_POST['v6_cre']."', $point_d, $point_f)";
 
     $query = str_replace('\'-- \'', 'NULL', $query);
     $query = str_replace('\'\'', 'NULL', $query);
@@ -116,6 +148,7 @@ if (!$controllo) {
     <b>Zone</b>
     <br/>
     <select name="t_zone">
+    <option value="">Aucun</option>
     <?php
         $result = pg_query("SELECT id, zone FROM crevette.t_zone ORDER BY zone");
         while($row = pg_fetch_row($result)) {
@@ -201,40 +234,113 @@ if (!$controllo) {
     <br/>
     <b>Point debut GPS</b>
     <br/>
+    <input type="radio" name="t_coord_d" value="DDMMSS_d" onchange="show('','DDMMSS_d');hide('DDMM_d');hide('DD_d')">DD&deg;MM&prime;SS.SS&prime;&prime;
+    <input type="radio" name="t_coord_d" value="DDMM_d" checked onchange="show('','DDMM_d');hide('DDMMSS_d');hide('DD_d')">DD&deg;MM.MM&prime;
+    <input type="radio" name="t_coord_d" value="DD_d" onchange="show('','DD_d');hide('DDMM_d');hide('DDMMSS_d')">DD.DD&deg;
+    <br/>
+    <br/>
+
+    <div class="DDMMSS_d" style="display:none">
     <b>Latitude</b><br/>
-    <input type="text" size="5" name="lat_deg_d" value="<?php echo abs($lat_deg_d);?>" />&deg;
-    <input type="text" size="5" name="lat_min_d" value="<?php echo abs($lat_min_d);?>" />&prime;
-    <select name="NS">
-        <option value="N" <?php if($lat_deg_d >= 0){print "selected";} ?>>N</option>
-        <option value="S" <?php if($lat_deg_d < 0){print "selected";} ?>>S</option>
+    <input type="text" size="5" name="lat_deg_dms_d" value="<?php print $lat_deg_dms_d;?>"/>&deg;
+    <input type="text" size="5" name="lat_min_dms_d" value="<?php print $lat_min_dms_d;?>"/>&prime;
+    <input type="text" size="5" name="lat_sec_dms_d" value="<?php print $lat_sec_dms_d;?>"/>&prime;&prime;
+    </div>
+
+    <div class="DDMM_d">
+    <b>Latitude</b><br/>
+    <input type="text" size="5" name="lat_deg_dm_d" value="<?php print $lat_deg_dm_d;?>"/>&deg;
+    <input type="text" size="5" name="lat_min_dm_d" value="<?php print $lat_min_dm_d;?>"/>&prime;
+    </div>
+
+    <div class="DD_d" style="display:none">
+    <b>Latitude</b><br/>
+    <input type="text" size="5" name="lat_deg_dd_"  value="<?php print $lat_deg_d_d;?>"/>&deg;
+    </div>
+
+    <select name="NS_d">
+        <option value="N" <?php if($NS_d == 'N') {print 'selected';} ?>>N</option>
+        <option value="S" <?php if($NS_d == 'S') {print 'selected';} ?>>S</option>
     </select>
-    <br/><br/>
+
+    <div class="DDMMSS_d" style="display:none">
     <b>Longitude</b><br/>
-    <input type="text" size="5" name="lon_deg_d" value="<?php echo abs($lon_deg_d);?>" />&deg;
-    <input type="text" size="5" name="lon_min_d" value="<?php echo abs($lon_min_d);?>" />&prime;
-    <select name="EW">
-        <option value="E" <?php if($lon_deg_d >= 0){print "selected";} ?>>E</option>
-        <option value="W" <?php if($lon_deg_d < 0){print "selected";} ?>>W</option>
+    <input type="text" size="5" name="lon_deg_dms_d" value="<?php print $lon_deg_dms_d;?>"/>&deg;
+    <input type="text" size="5" name="lon_min_dms_d" value="<?php print $lon_min_dms_d;?>"/>&prime;
+    <input type="text" size="5" name="lon_sec_dms_d" value="<?php print $lon_sec_dms_d;?>"/>&prime;&prime;
+    </div>
+
+    <div class="DDMM_d">
+    <b>Longitude</b><br/>
+    <input type="text" size="5" name="lon_deg_dm_d" value="<?php print $lon_deg_dm_d;?>"/>&deg;
+    <input type="text" size="5" name="lon_min_dm_d" value="<?php print $lon_min_dm_d;?>"/>&prime;
+    </div>
+
+    <div class="DD_d" style="display:none">
+    <b>Longitude</b><br/>
+    <input type="text" size="5" name="lon_deg_d_d"  value="<?php print $lon_deg_d_d;?>"/>&deg;
+    </div>
+
+    <select name="EO_d">
+        <option value="E" <?php if($EO_d == 'E') {print 'selected';} ?> >E</option>
+        <option value="O" <?php if($EO_d == 'O') {print 'selected';} ?>>O</option>
     </select>
     <br/>
     <br/>
     <b>Point fin GPS</b>
     <br/>
+    <input type="radio" name="t_coord_f" value="DDMMSS_f" onchange="show('','DDMMSS_f');hide('DDMM_f');hide('DD_f')">DD&deg;MM&prime;SS.SS&prime;&prime;
+    <input type="radio" name="t_coord_f" value="DDMM_f" checked onchange="show('','DDMM_f');hide('DDMMSS_f');hide('DD_f')">DD&deg;MM.MM&prime;
+    <input type="radio" name="t_coord_f" value="DD_f" onchange="show('','DD_f');hide('DDMM_f');hide('DDMMSS_f')">DD.DD&deg;
+    <br/>
+    <br/>
+
+    <div class="DDMMSS_f" style="display:none">
     <b>Latitude</b><br/>
-    <input type="text" size="5" name="lat_deg_f" value="<?php echo abs($lat_deg_f);?>" />&deg;
-    <input type="text" size="5" name="lat_min_f" value="<?php echo abs($lat_min_f);?>" />&prime;
-    <select name="NS">
-        <option value="N" <?php if($lat_deg_f >= 0){print "selected";} ?>>N</option>
-        <option value="S" <?php if($lat_deg_f < 0){print "selected";} ?>>S</option>
+    <input type="text" size="5" name="lat_deg_dms_f" value="<?php print $lat_deg_dms_f;?>"/>&deg;
+    <input type="text" size="5" name="lat_min_dms_f" value="<?php print $lat_min_dms_f;?>"/>&prime;
+    <input type="text" size="5" name="lat_sec_dms_f" value="<?php print $lat_sec_dms_f;?>"/>&prime;&prime;
+    </div>
+
+    <div class="DDMM_f">
+    <b>Latitude</b><br/>
+    <input type="text" size="5" name="lat_deg_dm_f" value="<?php print $lat_deg_dm_f;?>"/>&deg;
+    <input type="text" size="5" name="lat_min_dm_f" value="<?php print $lat_min_dm_f;?>"/>&prime;
+    </div>
+
+    <div class="DD_f" style="display:none">
+    <b>Latitude</b><br/>
+    <input type="text" size="5" name="lat_deg_d_f"  value="<?php print $lat_deg_d_f;?>"/>&deg;
+    </div>
+
+    <select name="NS_f">
+        <option value="N" <?php if($NS_f == 'N') {print 'selected';} ?>>N</option>
+        <option value="S" <?php if($NS_f == 'S') {print 'selected';} ?>>S</option>
     </select>
-    <br/><br/>
+
+    <div class="DDMMSS_f" style="display:none">
     <b>Longitude</b><br/>
-    <input type="text" size="5" name="lon_deg_f" value="<?php echo abs($lon_deg_f);?>" />&deg;
-    <input type="text" size="5" name="lon_min_f" value="<?php echo abs($lon_min_f);?>" />&prime;
-    <select name="EW">
-        <option value="E" <?php if($lon_deg_f >= 0){print "selected";} ?>>E</option>
-        <option value="W" <?php if($lon_deg_f < 0){print "selected";} ?>>W</option>
+    <input type="text" size="5" name="lon_deg_dms_f" value="<?php print $lon_deg_dms_f;?>"/>&deg;
+    <input type="text" size="5" name="lon_min_dms_f" value="<?php print $lon_min_dms_f;?>"/>&prime;
+    <input type="text" size="5" name="lon_sec_dms_f" value="<?php print $lon_sec_dms_f;?>"/>&prime;&prime;
+    </div>
+
+    <div class="DDMM_f">
+    <b>Longitude</b><br/>
+    <input type="text" size="5" name="lon_deg_dm_f" value="<?php print $lon_deg_dm_f;?>"/>&deg;
+    <input type="text" size="5" name="lon_min_dm_f" value="<?php print $lon_min_dm_f;?>"/>&prime;
+    </div>
+
+    <div class="DD_f" style="display:none">
+    <b>Longitude</b><br/>
+    <input type="text" size="5" name="lon_deg_d_f"  value="<?php print $lon_deg_d_f;?>"/>&deg;
+    </div>
+
+    <select name="EO_f">
+        <option value="E" <?php if($EO_f == 'E') {print 'selected';} ?> >E</option>
+        <option value="O" <?php if($EO_f == 'O') {print 'selected';} ?>>O</option>
     </select>
+
     <br/>
     <br/>
     <input type="hidden" value="<?php echo $results[0]; ?>" name="id"/>
@@ -287,7 +393,7 @@ if (!$controllo) {
     <b>Navire</b>
     <br/>
     <select id="id_navire" name="id_navire" onchange="menu_pop_1('id_navire','date_l','id_navire','date_l','crevette.lance')">
-    <option  value="none">Please choose one</option>
+    <option  value="none">Veuillez choisir ci-dessus</option>
     <?php
     $result = pg_query("SELECT DISTINCT id_navire, navire FROM crevette.lance "
             . "LEFT JOIN vms.navire ON crevette.lance.id_navire = vms.navire.id "
@@ -345,14 +451,14 @@ if (!$controllo) {
     <br/>
     <b>Espece</b>
     <br/>
-    <select id="species" name="id_species">
+    <select name="id_species" class="chosen-select">
     <?php
-    $result = pg_query("SELECT id, francaise FROM fishery.species WHERE category = 'crevette' ORDER BY francaise");
+    $result = pg_query("SELECT DISTINCT fishery.species.id, fishery.species.FAO, fishery.species.francaise, fishery.species.family, fishery.species.genus, fishery.species.species  FROM fishery.species WHERE fishery.species.category LIKE '%industrial%' ORDER BY fishery.species.family, fishery.species.genus, fishery.species.species");
     while($row = pg_fetch_row($result)) {
         if ($row[0] == $results[6]) {
-            print "<option value=\"$row[0]\" selected=\"selected\">$row[1]</option>";
+            print "<option value=\"$row[0]\" selected=\"selected\">".formatSpeciesFAO($row[1],$row[2],$row[3],$row[4],$row[5])."</option>";
         } else {
-            print "<option value=\"$row[0]\">$row[1]</option>";
+            print "<option value=\"$row[0]\">".formatSpeciesFAO($row[1],$row[2],$row[3],$row[4],$row[5])."</option>";
         }
     }
     ?>

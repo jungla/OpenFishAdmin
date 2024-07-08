@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://www.netbeans.org/ns/project/1">
+    <type>org.netbeans.modules.php.project</type>
+    <configuration>
+        <data xmlns="http://www.netbeans.org/ns/php-project/1">
+            <name>geospatialdb</name>
+        </data>
+        <spellchecker-wordlist xmlns="http://www.netbeans.org/ns/spellchecker-wordlist/1">
+            <word>AppartenanceBalise</word>
+            <word>cryptée</word>
+            <word>CSV</word>
+            <word>marché</word>
+            <word>Navire</word>
+            <word>pièce</word>
+            <word>Remarques</word>
+        </spellchecker-wordlist>
+    </configuration>
+</project>

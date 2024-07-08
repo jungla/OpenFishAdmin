@@ -16,7 +16,7 @@ print $query;
 
 $result = pg_query($query);
 
-print "<option  value=\"none\">Please choose one</option>";
+print "<option  value=\"none\">Veuillez choisir ci-dessus</option>";
 
 while ($row = pg_fetch_array($result)) {
     print "<option value=\"$row[0]\" >" . $row[0] . "</option>";

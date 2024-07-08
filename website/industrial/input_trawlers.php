@@ -26,7 +26,6 @@ if ($table == 'route') {
 
 //se submit = go!
 if ($_POST['submit'] == "Enregistrer") {
-
   $lon_deg_dms_d = htmlspecialchars($_POST['lon_deg_dms_d'],ENT_QUOTES);
   $lat_deg_dms_d = htmlspecialchars($_POST['lat_deg_dms_d'],ENT_QUOTES);
   $lon_min_dms_d = htmlspecialchars($_POST['lon_min_dms_d'],ENT_QUOTES);
@@ -233,7 +232,7 @@ if (!$controllo) {
 
     <div class="DD_d" style="display:none">
     <b>Latitude</b><br/>
-    <input type="text" size="5" name="lat_deg_d"  value="<?php print $lat_deg_d;?>"/>&deg;
+    <input type="text" size="5" name="lat_deg_d_d"  value="<?php print $lat_deg_d_d;?>"/>&deg;
     </div>
 
     <select name="NS_d">
@@ -288,7 +287,7 @@ if (!$controllo) {
 
     <div class="DD_f" style="display:none">
     <b>Latitude</b><br/>
-    <input type="text" size="5" name="lat_deg_f"  value="<?php print $lat_deg_f;?>"/>&deg;
+    <input type="text" size="5" name="lat_deg_d_f"  value="<?php print $lat_deg_d_f;?>"/>&deg;
     </div>
 
     <select name="NS_f">
@@ -427,7 +426,7 @@ if (!$controllo) {
     <input type="text" size="20" name="poids" value="<?php echo $results[7]; ?>"/>
     <br/>
     <br/>
-    <b>Nombre individues</b>
+    <b>Nombre d&apos;individuss</b>
     <br/>
     <input type="text" size="20" name="n_ind" value="<?php echo $results[7]; ?>"/>
     <br/>
@@ -473,14 +472,14 @@ if ($_POST['submit'] == "Enregistrer") {
     $c4_poi = $_POST['c4_poi'];
     $c5_poi = $_POST['c5_poi'];
     $c6_poi = $_POST['c6_poi'];
+    $comment = $_POST['comment'];
 
     $q_id = "SELECT id FROM trawlers.route WHERE maree = '$maree' AND lance = '$lance'";
     $id_route = pg_fetch_row(pg_query($q_id))[0];
 
     $query = "INSERT INTO trawlers.p_lance "
-        . "(datetime, username, id_route, maree, lance, id_species, c0_cre, c1_cre, c2_cre, c3_cre, c4_cre, c5_cre, c6_cre, c7_cre, c8_cre, c9_cre, c0_poi, c1_poi, c2_poi, c3_poi, c4_poi, c5_poi, c6_poi) "
-        . "VALUES (now(), '$username', '$id_route', '$maree', '$lance', '$id_species', '$c0_cre', '$c1_cre', '$c2_cre', '$c3_cre', '$c4_cre', '$c5_cre', '$c6_cre', '$c7_cre', '$c8_cre', '$c9_cre', '$c0_poi', '$c1_poi', '$c2_poi', '$c3_poi', '$c4_poi', '$c5_poi', '$c6_poi')";
-
+        . "(datetime, username, id_route, maree, lance, id_species, c0_cre, c1_cre, c2_cre, c3_cre, c4_cre, c5_cre, c6_cre, c7_cre, c8_cre, c9_cre, c0_poi, c1_poi, c2_poi, c3_poi, c4_poi, c5_poi, c6_poi, comment) "
+        . "VALUES (now(), '$username', '$id_route', '$maree', '$lance', '$id_species', '$c0_cre', '$c1_cre', '$c2_cre', '$c3_cre', '$c4_cre', '$c5_cre', '$c6_cre', '$c7_cre', '$c8_cre', '$c9_cre', '$c0_poi', '$c1_poi', '$c2_poi', '$c3_poi', '$c4_poi', '$c5_poi', '$c6_poi', '$comment')";
 
     $query = str_replace('\'\'', 'NULL', $query);
 
@@ -491,7 +490,6 @@ if ($_POST['submit'] == "Enregistrer") {
         #print $query;
         header("Location: ".$_SESSION['http_host']."/executed.php?dest=Insert Data&id_dest=industrial/input_trawlers.php");
     }
-
 
   $controllo = 1;
 
@@ -575,6 +573,11 @@ if (!$controllo) {
         </tr>
     </table>
     <br/>
+    <b>Remarques</b>
+    <br/>
+    <textarea cols="30" rows="5" name="comment"><?php echo $results[15];?></textarea>
+    <br/>
+    <br/>
     <input type="submit" value="Enregistrer" name="submit"/>
     </form>
 
@@ -611,10 +614,11 @@ if (!$controllo) {
         $c4_poi = $_POST['c4_poi'];
         $c5_poi = $_POST['c5_poi'];
         $c6_poi = $_POST['c6_poi'];
+        $comment = $_POST['comment'];
 
         $query = "INSERT INTO trawlers.p_day "
-            . "(datetime, username, maree, date_d, lance_d, lance_f, id_species, c0_cre, c1_cre, c2_cre, c3_cre, c4_cre, c5_cre, c6_cre, c7_cre, c8_cre, c9_cre, c0_poi, c1_poi, c2_poi, c3_poi, c4_poi, c5_poi, c6_poi) "
-            . "VALUES (now(), '$username', '$maree', '$date_d', '$lance_d', '$lance_f', '$id_species', '$c0_cre', '$c1_cre', '$c2_cre', '$c3_cre', '$c4_cre', '$c5_cre', '$c6_cre', '$c7_cre', '$c8_cre', '$c9_cre', '$c0_poi', '$c1_poi', '$c2_poi', '$c3_poi', '$c4_poi', '$c5_poi', '$c6_poi')";
+            . "(datetime, username, maree, date_d, lance_d, lance_f, id_species, c0_cre, c1_cre, c2_cre, c3_cre, c4_cre, c5_cre, c6_cre, c7_cre, c8_cre, c9_cre, c0_poi, c1_poi, c2_poi, c3_poi, c4_poi, c5_poi, c6_poi, comment) "
+            . "VALUES (now(), '$username', '$maree', '$date_d', '$lance_d', '$lance_f', '$id_species', '$c0_cre', '$c1_cre', '$c2_cre', '$c3_cre', '$c4_cre', '$c5_cre', '$c6_cre', '$c7_cre', '$c8_cre', '$c9_cre', '$c0_poi', '$c1_poi', '$c2_poi', '$c3_poi', '$c4_poi', '$c5_poi', '$c6_poi', '$comment')";
 
         $query = str_replace('\'\'', 'NULL', $query);
 
@@ -709,6 +713,11 @@ if (!$controllo) {
             ?>
         </tr>
     </table>
+    <br/>
+    <b>Remarques</b>
+    <br/>
+    <textarea cols="30" rows="5" name="comment"><?php echo $results[15];?></textarea>
+    <br/>
     <br/>
     <input type="submit" value="Enregistrer" name="submit"/>
     </form>
@@ -863,7 +872,7 @@ if (!$controllo) {
     <input type="text" size="5" name="poids" value="<?php print $results[9]; ?>">
     <br/>
     <br/>
-    <b>Numero Individu par taille</b> (mm)
+    <b>Nombre Individu par taille</b> (mm)
     <br/>
     <br/>
         <table border="1">
@@ -1913,7 +1922,7 @@ if (!$controllo) {
     </select>
     <br/>
     <br/>
-    <b>Numero individue</b>
+    <b>Nombre d&apos;individus</b>
     <br/>
     <input type="text" size="5" name="n_ind" value="<?php echo $results[12]; ?>"/>
     <br/>
@@ -2009,7 +2018,7 @@ if (!$controllo) {
     $photo = $_POST['photo'];
     $remarque = htmlspecialchars($_POST['remarque'],ENT_QUOTES);
 
-    $q_id = "SELECT id FROM trawlers.route_accidentelle WHERE maree = '$maree' AND date = '$date' AND heure = '$heure'";
+    $q_id = "SELECT id FROM trawlers.route_accidentelle WHERE maree = '$maree' AND date = '$date' AND time = '$time'";
     $id_route = pg_fetch_row(pg_query($q_id))[0];
 
     #print $q_id;
@@ -2102,7 +2111,7 @@ if (!$controllo) {
     </select>
     <br/>
     <br/>
-    <b>Numero individue</b>
+    <b>Nombre d&apos;individus</b>
     <br/>
     <input type="text" size="5" name="n_ind" value="<?php echo $results[12]; ?>"/>
     <br/>
@@ -2212,7 +2221,7 @@ if (!$controllo) {
         $photo = $_POST['photo'];
         $remarque = htmlspecialchars($_POST['remarque'],ENT_QUOTES);
 
-        $q_id = "SELECT id FROM trawlers.route_accidentelle WHERE maree = '$maree' AND date = '$date' AND heure = '$heure'";
+        $q_id = "SELECT id FROM trawlers.route_accidentelle WHERE maree = '$maree' AND date = '$date' AND time = '$time'";
         $id_route = pg_fetch_row(pg_query($q_id))[0];
 
         #print $q_id;
@@ -2303,7 +2312,7 @@ if (!$controllo) {
     </select>
     <br/>
     <br/>
-    <b>Numero individue</b>
+    <b>Nombre d&apos;individus</b>
     <br/>
     <input type="text" size="5" name="n_ind" value="<?php echo $results[12]; ?>"/>
     <br/>

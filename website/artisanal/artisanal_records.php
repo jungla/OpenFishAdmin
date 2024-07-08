@@ -9,14 +9,25 @@ top();
 if(right_write($_SESSION['username'],3,2)) {
 ?>
 
-<h2>Statistiques de P&ecirc;che Artisanale Maritime</h2>
-
+<h2>Cahier de Bord de Captaine</h2>
 <table id="results">
-    <tr><td>Captures </td><td><a href="view_records_capture.php?source=artisanal&table=captures&action=show"><i class="material-icons">search</i>Voir</a> </td><td> <a href="input_records.php?source=artisanal&table=captures"><i class="material-icons">create</i>Saisir</a> </td><td> <a href="download_form.php?source=artisanal&table=captures&action=download"><i class="material-icons">file_download</i>T&eacute;l&eacute;charger</a></td></tr>
+    <tr><td>Captures </td><td><a href="inspectors/view_records_capture.php?source=artisanal&table=captures&action=show"><i class="material-icons">search</i>Voir</a> </td><td> <a href="input_records.php?source=artisanal&table=captures"><i class="material-icons">create</i>Saisir</a> </td><td> <a href="download_form.php?source=artisanal&table=captures&action=download"><i class="material-icons">file_download</i>T&eacute;l&eacute;charger</a></td></tr>
+</table>
+
+<h2>Donnees des Enqueteurs au Debarcadere</h2>
+<table id="results">
+    <tr><td>Captures </td><td><a href="inspectors/view_records_capture.php?source=artisanal&table=captures&action=show"><i class="material-icons">search</i>Voir</a> </td><td> <a href="input_records.php?source=artisanal&table=captures"><i class="material-icons">create</i>Saisir</a> </td><td> <a href="download_form.php?source=artisanal&table=captures&action=download"><i class="material-icons">file_download</i>T&eacute;l&eacute;charger</a></td></tr>
+</table>
+
+<h2>Donnees des Programme Observateurs Sanctuaire des Requins</h2>
+<table id="results">
+    <tr><td>Captures </td><td><a href="inspectors/view_records_capture.php?source=artisanal&table=captures&action=show"><i class="material-icons">search</i>Voir</a> </td><td> <a href="input_records.php?source=artisanal&table=captures"><i class="material-icons">create</i>Saisir</a> </td><td> <a href="download_form.php?source=artisanal&table=captures&action=download"><i class="material-icons">file_download</i>T&eacute;l&eacute;charger</a></td></tr>
     <tr><td>Effort de p&ecirc;che </td><td><a href="view_records_effort.php?source=artisanal&table=effort&action=show"><i class="material-icons">search</i>Voir</a> </td><td> <a href="input_records.php?source=artisanal&table=effort"><i class="material-icons">create</i>Saisir</a> </td><td> <a href="download_form.php?source=artisanal&table=effort&action=download"><i class="material-icons">file_download</i>T&eacute;l&eacute;charger</a></td></tr>
     <tr><td>Informations sur la flotte</td><td> <a href="view_records_fleet.php?source=artisanal&table=fleet&action=show"><i class="material-icons">search</i>Voir</a> </td><td> <a href="input_records.php?source=artisanal&table=fleet"><i class="material-icons">create</i>Saisir</a> </td><td> <a href="download_form.php?source=artisanal&table=fleet&action=download"><i class="material-icons">file_download</i>T&eacute;l&eacute;charger</a></td></tr>
     <tr><td>Prix &agrave; la vente</td><td> <a href="view_records_market.php?source=artisanal&table=market&action=show"><i class="material-icons">search</i>Voir</a> </td><td> <a href="input_records.php?source=artisanal&table=market"><i class="material-icons">create</i>Saisir</a> </td><td> <a href="download_form.php?source=artisanal&table=market&action=download"><i class="material-icons">file_download</i>T&eacute;l&eacute;charger</a></td></tr>
 </table>
+
+
 
 <!--
 <ul>

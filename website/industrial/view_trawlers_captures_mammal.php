@@ -226,7 +226,7 @@ if ($_GET['action'] == 'map') {
         . "ORDER BY captures_mammal.datetime DESC OFFSET $start LIMIT $step";
     }
 
-    #print $query;
+    //print $query;
 
     $r_query = pg_query($query);
 
@@ -339,7 +339,7 @@ if ($_GET['action'] == 'map') {
     </select>
     <br/>
     <br/>
-    <b>Numero individue</b>
+    <b>Nombre d&apos;individus</b>
     <br/>
     <input type="text" size="5" name="n_ind" value="<?php echo $results[12]; ?>"/>
     <br/>
@@ -347,7 +347,7 @@ if ($_GET['action'] == 'map') {
     <b>Sexe</b>
     <br/>
     <select name="t_sex">
-    <option value="none">Indetermine</option>
+    <option value="">Indetermine</option>
     <?php
     $result = pg_query("SELECT id, sex FROM trawlers.t_sex ORDER BY sex");
     while($row = pg_fetch_row($result)) {
@@ -432,8 +432,8 @@ if ($_GET['action'] == 'map') {
     $query = "DELETE FROM trawlers.captures_mammal WHERE id = '$id'";
 
     if(!pg_query($query)) {
+        print $query;
         msg_queryerror();
-//        print $query;
     } else {
         header("Location: ".$_SESSION['http_host']."/industrial/view_trawlers_captures_mammal.php?source=$source&table=captures_requin&action=show");
     }
@@ -483,7 +483,7 @@ if ($_POST['submit'] == "Enregistrer") {
     $query = str_replace('\'\'', 'NULL', $query);
 
     if(!pg_query($query)) {
-//        print $query;
+        print $query;
         msg_queryerror();
     } else {
         #print $query;

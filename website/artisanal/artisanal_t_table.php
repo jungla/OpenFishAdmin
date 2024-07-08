@@ -29,6 +29,11 @@ if(right_read($_SESSION['username'],5)) {
       <td><a href="input_artisanal_t_table.php?source=table&table=t_strata"><i class="material-icons">create</i>Saisir</a></td>
       </tr>
       <tr>
+      <td>Debarcadere obbligatoire</td>
+      <td><a href="view_artisanal_t_table.php?source=table&table=t_site_obb&action=show"><i class="material-icons">search</i>Voir</a></td>
+      <td><a href="input_artisanal_t_table.php?source=table&table=t_site_obb"><i class="material-icons">create</i>Saisir</a></td>
+      </tr>
+      <tr>
       <td>Documents identification Pecheur Proprietaire</td>
       <td><a href="view_artisanal_t_table.php?source=table&table=t_card&action=show"><i class="material-icons">search</i>Voir</a></td>
       <td><a href="input_artisanal_t_table.php?source=table&table=t_card"><i class="material-icons">create</i>Saisir</a></td>

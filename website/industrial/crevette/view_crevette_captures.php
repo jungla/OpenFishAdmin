@@ -218,14 +218,14 @@ if ($_GET['action'] == 'show') {
     <br/>
     <b>Espece</b>
     <br/>
-    <select id="species" name="id_species">
+    <select name="id_species" class="chosen-select">
     <?php
-    $result = pg_query("SELECT id, francaise FROM fishery.species WHERE category = 'crevette' ORDER BY francaise");
+    $result = pg_query("SELECT DISTINCT fishery.species.id, fishery.species.FAO, fishery.species.francaise, fishery.species.family, fishery.species.genus, fishery.species.species  FROM fishery.species WHERE fishery.species.category LIKE '%industrial%' ORDER BY fishery.species.family, fishery.species.genus, fishery.species.species");
     while($row = pg_fetch_row($result)) {
         if ($row[0] == $results[6]) {
-            print "<option value=\"$row[0]\" selected=\"selected\">$row[1]</option>";
+            print "<option value=\"$row[0]\" selected=\"selected\">".formatSpeciesFAO($row[1],$row[2],$row[3],$row[4],$row[5])."</option>";
         } else {
-            print "<option value=\"$row[0]\">$row[1]</option>";
+            print "<option value=\"$row[0]\">".formatSpeciesFAO($row[1],$row[2],$row[3],$row[4],$row[5])."</option>";
         }
     }
     ?>

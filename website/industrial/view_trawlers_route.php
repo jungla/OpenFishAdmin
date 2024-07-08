@@ -16,10 +16,12 @@ if ($_GET['table'] != "") {$_SESSION['path'][1] = $_GET['table'];}
 
 $_SESSION['filter']['f_t_fleet'] = $_POST['f_t_fleet'];
 $_SESSION['filter']['f_s_maree'] = $_POST['f_s_maree'];
+$_SESSION['filter']['f_s_lance'] = $_POST['f_s_lance'];
 $_SESSION['filter']['f_id_navire'] = $_POST['f_id_navire'];
 
 if ($_GET['f_t_fleet'] != "") {$_SESSION['filter']['f_t_fleet'] = $_GET['f_t_fleet'];}
 if ($_GET['f_s_maree'] != "") {$_SESSION['filter']['f_s_maree'] = $_GET['f_s_maree'];}
+if ($_GET['f_s_lance'] != "") {$_SESSION['filter']['f_s_lance'] = $_GET['f_s_lance'];}
 if ($_GET['f_id_navire'] != "") {$_SESSION['filter']['f_id_navire'] = $_GET['f_id_navire'];}
 
 $source = $_SESSION['path'][0];
@@ -131,7 +133,7 @@ if ($_GET['action'] == 'map') {
     <form method="post" action="<?php echo $self;?>?source=trawlers&table=route&action=show" enctype="multipart/form-data">
     <fieldset>
 
-    <table id="no-border"><tr><td><b>Navire</b></td><td><b>Maree</b></td><td><b>Flottille</b></td></tr>
+    <table id="no-border"><tr><td><b>Navire</b></td><td><b>Maree</b></td><td><b>Lancee</b></td><td><b>Flottille</b></td></tr>
     <tr>
     <td>
     <select name="f_id_navire">
@@ -149,7 +151,10 @@ if ($_GET['action'] == 'map') {
     </select>
     </td>
     <td>
-    <input type="text" size="20" name="f_s_maree" value="<?php echo $_SESSION['filter']['f_s_maree']?>"/>
+    <input type="text" size="10" name="f_s_maree" value="<?php echo $_SESSION['filter']['f_s_maree']?>"/>
+    </td>
+    <td>
+    <input type="text" size="5" name="f_s_lance" value="<?php echo $_SESSION['filter']['f_s_lance']?>"/>
     </td>
     <td>
     <select name="f_t_fleet">
@@ -174,7 +179,7 @@ if ($_GET['action'] == 'map') {
 
     <br/>
 
-    <table>
+    <table id='small'>
     <tr align="center"><td></td>
     <td><b>Date & Utilisateur</b></td>
     <td><b>Navire</b></td>
@@ -187,7 +192,7 @@ if ($_GET['action'] == 'map') {
     <td><b>Vitesse (nd)</b></td>
     <td><b>Rejete (kg)</b></td>
     <td><b>Echantillion (kg)</b></td>
-    <td><b>GPS debut/fin</b></td>
+    <td nowrap><b>GPS debut/fin</b></td>
     <td><b>Remarque</b></td>
     </tr>
 
@@ -197,14 +202,21 @@ if ($_GET['action'] == 'map') {
 
     #id, datetime, username, carte, id_route, t_site, payment, receipt, date_d, date_f, id_license, carte_saisie ,
 
-    if ($_SESSION['filter']['f_id_navire'] != "" OR $_SESSION['filter']['f_s_maree'] != "" OR $_SESSION['filter']['f_t_fleet'] != "") {
+    if ($_SESSION['filter']['f_id_navire'] != "" OR $_SESSION['filter']['f_s_maree'] != "" OR $_SESSION['filter']['f_s_lance'] != "" OR $_SESSION['filter']['f_t_fleet'] != "") {
 
         $_SESSION['start'] = 0;
+
+        if ($_SESSION['filter']['f_s_lance'] == '') {
+          $f_s_lance = 'lance';
+        } else {
+          $f_s_lance = $_SESSION['filter']['f_s_lance'];
+        }
 
         if ($_SESSION['filter']['f_s_maree'] != "") {
             $query = "SELECT count(route.id) FROM trawlers.route "
             . "WHERE trawlers.route.t_fleet=".$_SESSION['filter']['f_t_fleet']." "
-            . "AND id_navire=.".$_SESSION['filter']['f_id_navire']." ";
+            . "AND trawlers.route.lance = ".$f_s_lance." "
+            . "AND id_navire=".$_SESSION['filter']['f_id_navire']." ";
 
             $pnum = pg_fetch_row(pg_query($query))[0];
 
@@ -215,6 +227,7 @@ if ($_GET['action'] == 'map') {
             . "LEFT JOIN vms.navire ON trawlers.route.id_navire = vms.navire.id "
             . "WHERE trawlers.route.t_fleet=".$_SESSION['filter']['f_t_fleet']." "
             . "AND id_navire=".$_SESSION['filter']['f_id_navire']." "
+            . "AND trawlers.route.lance = ".$f_s_lance." "
             . "ORDER BY score DESC OFFSET $start LIMIT $step";
 
         } else {
@@ -230,6 +243,7 @@ if ($_GET['action'] == 'map') {
             . "LEFT JOIN vms.navire ON trawlers.route.id_navire = vms.navire.id "
             . "WHERE trawlers.route.t_fleet=".$_SESSION['filter']['f_t_fleet']." "
             . "AND id_navire=".$_SESSION['filter']['f_id_navire']." "
+            . "AND trawlers.route.lance = ".$f_s_lance." "
             . "ORDER BY route.datetime DESC OFFSET $start LIMIT $step";
         }
     } else {
@@ -243,7 +257,7 @@ if ($_GET['action'] == 'map') {
         . "ORDER BY route.datetime DESC OFFSET $start LIMIT $step";
     }
 
-    #print $query;
+    //print $query;
 
     $r_query = pg_query($query);
 
@@ -264,11 +278,11 @@ if ($_GET['action'] == 'map') {
 
         print "<td nowrap>$results[0]<br/>$results[1]</td><td nowrap><a href=\"./view_navire.php?source=vms&id=$results[20]\">$results[3]</a></td><td>$results[4]</td><td>$results[5]</td><td nowrap>$results[6]</td>"
         . "<td>$results[7]</td><td>$results[8]<br/>$results[9]</td><td>$results[10]<br/>$results[11]</td><td>$results[12]</td><td>$results[13]</td><td>$results[14]</td>"
-                . "<td><a href=\"view_point.php?X=$results[16]&Y=$results[17]\">$lat_d $lon_d</a><br/><a href=\"view_point.php?X=$results[18]&Y=$results[19]\">$lat_f $lon_f</a><br/></td><td>$results[15]</td></tr>";
+                . "<td><a href=\"view_point.php?X=$results[16]&Y=$results[17]\">$lat_d<br/>$lon_d</a><br/><a href=\"view_point.php?X=$results[18]&Y=$results[19]\">$lat_f<br/>$lon_f</a><br/></td><td>$results[15]</td></tr>";
     }
     print "</tr>";
     print "</table>";
-    pages($start,$step,$pnum,'./view_trawlers_route.php?source=trawlers&table=route&action=show&f_id_navire='.$_SESSION['filter']['f_id_navire'].'&f_s_maree='.$_SESSION['filter']['f_s_maree'].'&f_t_fleet='.$_SESSION['filter']['f_t_fleet']);
+    pages($start,$step,$pnum,'./view_trawlers_route.php?source=trawlers&table=route&action=show&f_id_navire='.$_SESSION['filter']['f_id_navire'].'&f_s_maree='.$_SESSION['filter']['f_s_maree'].'&f_s_lance='.$_SESSION['filter']['f_s_lance'].'&f_t_fleet='.$_SESSION['filter']['f_t_fleet']);
 
     $controllo = 1;
 
@@ -282,26 +296,13 @@ if ($_GET['action'] == 'map') {
 
     //find record info by ID
     $q_id = "SELECT *, st_y(location_d), st_x(location_d), st_y(location_f), st_x(location_f) FROM trawlers.route WHERE id = '$id' ORDER BY datetime DESC";
+    //print $q_id;
 
     $r_id = pg_query($q_id);
     $results = pg_fetch_row($r_id);
 
     $lat_d = $results[18];
     $lon_d = $results[19];
-
-    # OLD
-    $lat_deg_d = intval($lat_d);
-    $lat_min_d = ($lat_d - intval($lat_d))*60;
-
-    $lon_deg_d = intval($lon_d);
-    $lon_min_d = ($lon_d - intval($lon_d))*60;
-
-    $lat_deg_f = intval($lat_f);
-    $lat_min_f = ($lat_f - intval($lat_f))*60;
-
-    $lon_deg_f = intval($lon_f);
-    $lon_min_f = ($lon_f - intval($lon_f))*60;
-    # OLD
 
     if ($lat_d > 0) {$NS_d = 'N';} else {$lat_d = -1*$lat_d; $NS_d = 'S';}
     if ($lon_d > 0) {$EO_d = 'E';} else {$lon_d = -1*$lon_d; $EO_d = 'O';}
@@ -455,7 +456,7 @@ if ($_GET['action'] == 'map') {
 
     <div class="DD_d" style="display:none">
     <b>Latitude</b><br/>
-    <input type="text" size="5" name="lat_deg_d"  value="<?php print $lat_deg_d;?>"/>&deg;
+    <input type="text" size="5" name="lat_deg_d_d"  value="<?php print $lat_deg_d_d;?>"/>&deg;
     </div>
 
     <select name="NS_d">
@@ -510,7 +511,7 @@ if ($_GET['action'] == 'map') {
 
     <div class="DD_f" style="display:none">
     <b>Latitude</b><br/>
-    <input type="text" size="5" name="lat_deg_f"  value="<?php print $lat_deg_f;?>"/>&deg;
+    <input type="text" size="5" name="lat_deg_d_f"  value="<?php print $lat_deg_d_f;?>"/>&deg;
     </div>
 
     <select name="NS_f">

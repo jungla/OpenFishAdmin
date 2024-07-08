@@ -167,7 +167,7 @@ if (!$controllo) {
     <select name="t_site_obb"  class="chosen-select" >
     <option value="">Aucun</option>
     <?php
-    $result = pg_query("SELECT * FROM artisanal.t_site_obb ORDER BY site");
+    $result = pg_query("SELECT * FROM artisanal.t_site_obb WHERE active ORDER BY site");
     while($row = pg_fetch_row($result)) {
         if ($row[0] == $results[10]) {
             print "<option value=\"$row[0]\" selected=\"selected\">".$row[1]."</option>";
@@ -234,7 +234,7 @@ if (!$controllo) {
     <select name="t_site_obb_2"  class="chosen-select" >
     <option value="">Aucun</option>
     <?php
-    $result = pg_query("SELECT * FROM artisanal.t_site_obb ORDER BY site");
+    $result = pg_query("SELECT * FROM artisanal.t_site_obb WHERE active ORDER BY site");
     while($row = pg_fetch_row($result)) {
         if ($row[0] == $results[10]) {
             print "<option value=\"$row[0]\" selected=\"selected\">".$row[1]."</option>";

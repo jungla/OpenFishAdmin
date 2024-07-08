@@ -38,7 +38,7 @@ if(logged($username,$password)) {
         <h4>Liste des utilisateurs</h4>
         <?php
 
-        $query = "SELECT DISTINCT users.id, users.datetime::date, users.username, INITCAP(first_name), UPPER(last_name), nickname, email FROM users.users "
+        $query = "SELECT DISTINCT users.id, users.datetime::date, users.username, INITCAP(first_name), UPPER(last_name), nickname, email, users.datetime FROM users.users "
                 . "LEFT JOIN users.project ON project.id_user = users.id "
                 . "LEFT JOIN users.t_role ON t_role.id = project.t_role "
                 . "LEFT JOIN users.t_project ON t_project.id = project.t_project "
@@ -70,7 +70,7 @@ if(logged($username,$password)) {
             $query = "SELECT project, role FROM users.project "
                     . "LEFT JOIN users.t_project ON project.t_project = t_project.id "
                     . "LEFT JOIN users.t_role ON project.t_role = t_role.id "
-                    . "WHERE project.id_user = '$results[0]'";
+                    . "WHERE project.id_user = '$results[0]' ORDER BY project";
 
             //print $query;
 
@@ -81,9 +81,9 @@ if(logged($username,$password)) {
             print "<tr align=\"center\">";
             print "<td rowspan=$nrow>";
 
-            if($_SESSION['username'] == $results[2]) {
-              print "<a href=\"./view_users_users.php?t_role=$t_role_usr&t_project=$t_project_usr&id=$results[0]&action=edit\">Modifier</a><br/>"
-                . "<a href=\"./view_users_users.php?t_role=$t_role_usr&t_project=$t_project_usr&id=$results[0]&action=delete\">Effacer</a>";
+            if($_SESSION['username'] == $results[2] OR $t_project_usr < 2) {
+              print "<a href=\"./view_users_users.php?id=$results[0]&action=edit\">Modifier</a><br/>"
+                . "<a href=\"./view_users_users.php?id=$results[0]&action=delete\">Effacer</a>";
             }
 
             print "</td>";
@@ -106,7 +106,7 @@ if(logged($username,$password)) {
         $id = $_GET['id'];
 
         //find record info by ID
-        $q_id = "SELECT users.id, users.first_name, users.last_name, users.email FROM users.users "
+        $q_id = "SELECT users.id, users.first_name, users.last_name, users.email, users.nickname FROM users.users "
                 //. "LEFT JOIN users.project ON project.id_user = users.id "
                 //. "LEFT JOIN users.t_role ON t_role.id = project.t_role "
                 //. "LEFT JOIN users.t_project ON t_project.id = project.t_project "
@@ -118,7 +118,7 @@ if(logged($username,$password)) {
 
         $results_usr = pg_fetch_row($r_id);
 
-        print "<h2>$results_usr[1] $results_usr[2]</h2>";
+        print "<h2>".ucwords(strtolower($results_usr[1]))." ".strtoupper($results_usr[2])."</h2>";
 
         ?>
         <form method="post" action="<?php echo $self;?>" enctype="multipart/form-data">
@@ -137,6 +137,34 @@ if(logged($username,$password)) {
         <input type="text" size="20" name="email" value="<?php echo $results_usr[3]; ?>"/>
         <br/>
         <br/>
+        <b>Surnom</b>
+        <br/>
+        <input type="text" size="20" name="nickname" value="<?php echo $results_usr[4]; ?>"/>
+        <br/>
+        <br/>
+
+        <script type="text/javascript">
+        function yesnoCheck() {
+        if (document.getElementById('yesCheck').checked) {
+          document.getElementById('ifYes').style.display = 'block';
+        }
+        else document.getElementById('ifYes').style.display = 'none';
+        }
+        </script>
+
+        <b>Modifier mot de passe?</b>
+        Oui <input type="radio" onclick="javascript:yesnoCheck();" name="yesno" id="yesCheck">&nbsp;
+        No <input type="radio" onclick="javascript:yesnoCheck();" name="yesno" id="noCheck" checked><br/>
+
+        <div id="ifYes" style="display:none">
+        <br/>
+        <b>Mot de passe</b>
+        <br/>
+        <input type="password" size="20" name="password" value=""/>
+        <br/>
+        <br/>
+        </div>
+
         <p>Selon votre niveau d'acc&egrave;s, vous pouvez ajouter des gestionnaires et / ou des visiteurs pour chaque ensemble de donn&eacute;es.</p>
         <ol>
         <?php
@@ -158,12 +186,13 @@ if(logged($username,$password)) {
         while($results = pg_fetch_row($rquery)) {
 
             // list of projects currently activated for the given user (not same as current user)
-            // it's an empty list if user is not in a given project
+            // it's an empty list if user is not in a project
 
             $query = "SELECT t_role, t_project.project, t_project.id FROM users.project "
                 . "LEFT JOIN users.users ON users.id = project.id_user "
                 . "LEFT JOIN users.t_project ON project.t_project = t_project.id "
-                . "WHERE users.id = '$id' AND project.t_project = '$results[0]'";
+                . "WHERE users.id = '$id' AND project.t_project = '$results[0]' "
+                . "ORDER BY t_project.project";
 
             //print $query;
 
@@ -181,6 +210,7 @@ if(logged($username,$password)) {
 
             print "<td><select name=\"t_role_$results[0]\">";
 
+            // if admin you can add other admins. If gestionnaire you can add only users.
             if ($results[1] == 1) {
               $results_rl = pg_query("SELECT id, role FROM users.t_role ORDER BY id");
             } else {
@@ -215,7 +245,6 @@ if(logged($username,$password)) {
         <input type="submit" value="Enregistrer" name="submit"/>
         </form>
 
-        <br/>
         <br/>
 
         <?php
@@ -254,14 +283,23 @@ if ($_POST['submit'] == "Enregistrer") {
     $first_name = htmlspecialchars($_POST['first_name'],ENT_QUOTES);
     $last_name = htmlspecialchars($_POST['last_name'],ENT_QUOTES);
     $email = htmlspecialchars($_POST['email'],ENT_QUOTES);
+    $nickname = htmlspecialchars($_POST['nickname'],ENT_QUOTES);
+    $password = htmlspecialchars($_POST['password'],ENT_QUOTES);
     //$active = $_POST['active'];
 
-    $query = "UPDATE users.users SET "
+    if ($password == '') {
+        $query = "UPDATE users.users SET "
         . "username = '$username', datetime = now(), "
         . "first_name = '$first_name', last_name = '$last_name', "
-        . "email = '$email' "
+        . "email = '$email', nickname = '$nickname' "
         . "WHERE id = '{".$_POST['id_user']."}'";
-
+      } else {
+        $query = "UPDATE users.users SET "
+        . "username = '$username', datetime = now(), "
+        . "first_name = '$first_name', last_name = '$last_name', "
+        . "email = '$email', nickname = '$nickname', password = '$password' "
+        . "WHERE id = '{".$_POST['id_user']."}'";
+      }
     $query = str_replace('\'\'', 'NULL', $query);
 
     if(!pg_query($query)) {

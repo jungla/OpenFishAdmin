@@ -246,7 +246,7 @@ if ($_GET['action'] == 'map') {
 
     $r_query = pg_query($query);
 
-    //print $query;
+    print $query;
 
     while ($results = pg_fetch_row($r_query)) {
 

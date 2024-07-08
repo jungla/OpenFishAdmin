@@ -20,9 +20,9 @@ top();
 <li>Les donn&eacute;es sur l'effort de p&ecirc;che</li>
 <li>Les donn&eacute;es sur la flotte</li>
 <li>Les donn&eacute;es sur les prix de la ressource</li>-->
-<li>Les donn&eacute;es sur les <a href="./artisanal_records.php">statistiques</a> de production</li>
-<li>Les donn&eacute;es sur les <a href="./artisanal_licenses.php">autorisations</a> de p&ecirc;che</li>
-<li>Les donn&eacute;es sur les <a href="./artisanal_infractions.php">infractions</a></li>
+<li>Les donn&eacute;es sur les <a href="./statistics/artisanal_records.php">statistiques</a> de production</li>
+<li>Les donn&eacute;es sur les <a href="./administration/artisanal_licenses.php">autorisations</a> de p&ecirc;che</li>
+<li>Les donn&eacute;es sur les <a href="./infractions/artisanal_infractions.php">infractions</a></li>
 </ul>
 
 <!--

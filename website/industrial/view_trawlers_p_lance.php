@@ -16,9 +16,11 @@ if ($_GET['table'] != "") {$_SESSION['path'][1] = $_GET['table'];}
 
 $_SESSION['filter']['f_id_species'] = $_POST['f_id_species'];
 $_SESSION['filter']['f_s_maree'] = $_POST['f_s_maree'];
+$_SESSION['filter']['f_s_lance'] = $_POST['f_s_lance'];
 
 if ($_GET['f_id_species'] != "") {$_SESSION['filter']['f_id_species'] = $_GET['f_id_species'];}
 if ($_GET['f_s_maree'] != "") {$_SESSION['filter']['f_s_maree'] = $_GET['f_s_maree'];}
+if ($_GET['f_s_lance'] != "") {$_SESSION['filter']['f_s_lance'] = $_GET['f_s_lance'];}
 
 $source = $_SESSION['path'][0];
 $table = $_SESSION['path'][1];
@@ -44,7 +46,6 @@ if ($_GET['action'] == 'map') {
 
     $lon_m = $lon_m/count($LKP);
     $lat_m = $lat_m/count($LKP);
-
 
     print "<div id=\"map\" style=\"height: 400px; width:100%; border: 1px solid black; float:right; margin-left:5%; margin-top:1em;\"></div>";
 
@@ -129,12 +130,15 @@ if ($_GET['action'] == 'map') {
     <form method="post" action="<?php echo $self;?>?source=trawlers&table=p_lance&action=show" enctype="multipart/form-data">
     <fieldset>
 
-    <table id="no-border"><tr><td><b>Mar&eacute;e</b></td><td><b>Esp&eacute;c&eacute;</b></td></tr>
+    <table id="no-border"><tr><td><b>Mar&eacute;e</b></td><td><b>Lance</b></td><td><b>Esp&eacute;c&eacute;</b></td></tr>
     <tr>
-    <td>
-    <input type="text" size="20" name="f_s_maree" value="<?php echo $_SESSION['filter']['f_s_maree']?>"/>
-    </td>
-    <td>
+      <td>
+      <input type="text" size="10" name="f_s_maree" value="<?php echo $_SESSION['filter']['f_s_maree']?>"/>
+      </td>
+      <td>
+      <input type="text" size="5" name="f_s_lance" value="<?php echo $_SESSION['filter']['f_s_lance']?>"/>
+      </td>
+      <td>
     <select name="f_id_species">
         <option value="id_species" selected="selected">Tous</option>
         <?php
@@ -179,48 +183,60 @@ if ($_GET['action'] == 'map') {
     <td><b>FF</b></td>
     <td><b>Mix</b></td>
     <td><b>Grosse pi&egrave;ce</b></td>
+    <td><b>Remarques</b></td>
     </tr>
 
     <?php
 
     // fetch data
 
-    if ($_SESSION['filter']['f_s_maree'] != "" OR $_SESSION['filter']['f_id_species'] != "") {
+    if ($_SESSION['filter']['f_s_maree'] != "" OR $_SESSION['filter']['f_s_lance'] != "" OR $_SESSION['filter']['f_id_species'] != "") {
 
         #id, datetime, username, id_route, id_species, maree, lance, c0_cre, c1_cre, c2_cre, c3_cre, c4_cre, c5_cre, c6_cre, c7_cre, c8_cre, c9_cre, c0_poi, c1_poi, c2_poi, c3_poi, c4_poi, c5_poi, c6_poi
 
         $_SESSION['start'] = 0;
 
+        if ($_SESSION['filter']['f_s_lance'] == '') {
+          $f_s_lance = 'lance';
+        } else {
+          $f_s_lance = $_SESSION['filter']['f_s_lance'];
+        }
+
         if ($_SESSION['filter']['f_s_maree'] != "") {
             $query = "SELECT count(p_lance.id) FROM trawlers.p_lance "
-                . "WHERE id_species=".$_SESSION['filter']['f_id_species']." ";
+                . "WHERE (id_species=".$_SESSION['filter']['f_id_species']." OR id_species IS NULL) "
+                . "AND trawlers.p_lance.lance = ".$f_s_lance." ";
 
             $pnum = pg_fetch_row(pg_query($query))[0];
 
-            $query = "SELECT p_lance.id, datetime::date, username, id_route, maree, lance, fishery.species.id, fishery.species.francaise, fishery.species.family, fishery.species.genus, fishery.species.species, c0_cre, c1_cre, c2_cre, c3_cre, c4_cre, c5_cre, c6_cre, c7_cre, c8_cre, c9_cre, c0_poi, c1_poi, c2_poi, c3_poi, c4_poi, c5_poi, c6_poi, "
+            $query = "SELECT p_lance.id, datetime::date, username, id_route, maree, lance, fishery.species.id, fishery.species.francaise, fishery.species.family, fishery.species.genus, fishery.species.species, c0_cre, c1_cre, c2_cre, c3_cre, c4_cre, c5_cre, c6_cre, c7_cre, c8_cre, c9_cre, c0_poi, c1_poi, c2_poi, c3_poi, c4_poi, c5_poi, c6_poi, comment, "
             . " coalesce(similarity(trawlers.p_lance.maree, '".$_SESSION['filter']['f_s_maree']."'),0) AS score"
             . " FROM trawlers.p_lance "
             . "LEFT JOIN fishery.species ON trawlers.p_lance.id_species = fishery.species.id "
-            . "WHERE id_species=".$_SESSION['filter']['f_id_species']." "
+            . "WHERE (id_species=".$_SESSION['filter']['f_id_species']." OR id_species IS NULL) "
+            . "AND trawlers.p_lance.lance = ".$f_s_lance." "
             . "ORDER BY score DESC, datetime DESC OFFSET $start LIMIT $step";
 
         } else {
 
             $query = "SELECT count(p_lance.id) FROM trawlers.p_lance "
-            . "WHERE id_species=".$_SESSION['filter']['f_id_species']." ";
+            . "WHERE (id_species=".$_SESSION['filter']['f_id_species']." OR id_species IS NULL) "
+            . "AND trawlers.p_lance.lance = ".$f_s_lance." ";
+
             $pnum = pg_fetch_row(pg_query($query))[0];
 
-            $query = "SELECT p_lance.id, datetime::date, username, id_route, maree, lance, fishery.species.id, fishery.species.francaise, fishery.species.family, fishery.species.genus, fishery.species.species, c0_cre, c1_cre, c2_cre, c3_cre, c4_cre, c5_cre, c6_cre, c7_cre, c8_cre, c9_cre, c0_poi, c1_poi, c2_poi, c3_poi, c4_poi, c5_poi, c6_poi  "
+            $query = "SELECT p_lance.id, datetime::date, username, id_route, maree, lance, fishery.species.id, fishery.species.francaise, fishery.species.family, fishery.species.genus, fishery.species.species, c0_cre, c1_cre, c2_cre, c3_cre, c4_cre, c5_cre, c6_cre, c7_cre, c8_cre, c9_cre, c0_poi, c1_poi, c2_poi, c3_poi, c4_poi, c5_poi, c6_poi, comment  "
             . " FROM trawlers.p_lance "
             . "LEFT JOIN fishery.species ON trawlers.p_lance.id_species = fishery.species.id "
-            . "WHERE id_species=".$_SESSION['filter']['f_id_species']." "
+            . "WHERE (id_species=".$_SESSION['filter']['f_id_species']." OR id_species IS NULL) "
+            . "AND trawlers.p_lance.lance = ".$f_s_lance." "
             . "ORDER BY datetime DESC OFFSET $start LIMIT $step";
         }
     } else {
         $query = "SELECT count(p_lance.id) FROM trawlers.p_lance";
         $pnum = pg_fetch_row(pg_query($query))[0];
 
-        $query = "SELECT p_lance.id, datetime::date, username, id_route, maree, lance, fishery.species.id, fishery.species.francaise, fishery.species.family, fishery.species.genus, fishery.species.species, c0_cre, c1_cre, c2_cre, c3_cre, c4_cre, c5_cre, c6_cre, c7_cre, c8_cre, c9_cre, c0_poi, c1_poi, c2_poi, c3_poi, c4_poi, c5_poi, c6_poi "
+        $query = "SELECT p_lance.id, datetime::date, username, id_route, maree, lance, fishery.species.id, fishery.species.francaise, fishery.species.family, fishery.species.genus, fishery.species.species, c0_cre, c1_cre, c2_cre, c3_cre, c4_cre, c5_cre, c6_cre, c7_cre, c8_cre, c9_cre, c0_poi, c1_poi, c2_poi, c3_poi, c4_poi, c5_poi, c6_poi, comment "
         . " FROM trawlers.p_lance "
         . "LEFT JOIN fishery.species ON trawlers.p_lance.id_species = fishery.species.id "
         . "ORDER BY datetime DESC OFFSET $start LIMIT $step";
@@ -245,8 +261,7 @@ if ($_GET['action'] == 'map') {
         . "<td>$results[15]</td><td>$results[16]</td><td>$results[17]</td><td>$results[18]</td>"
         . "<td>$results[19]</td><td>$results[20]</td><td>$results[21]</td><td>$results[22]</td>"
         . "<td>$results[23]</td><td>$results[24]</td><td>$results[25]</td><td>$results[26]</td>"
-        . "<td>$results[27]</td>"
-        . "</tr>";
+        . "<td>$results[27]</td><td>$results[28]</td>";
     }
     print "</tr>";
     print "</table>";
@@ -317,7 +332,7 @@ if ($_GET['action'] == 'map') {
         $result = pg_query("SELECT DISTINCT fishery.species.id, fishery.species.FAO, fishery.species.francaise, fishery.species.family, fishery.species.genus, fishery.species.species FROM fishery.species ORDER BY fishery.species.family, fishery.species.genus, fishery.species.species");
         #$result = pg_query("SELECT DISTINCT fishery.species.id, fishery.species.FAO, fishery.species.francaise, fishery.species.family, fishery.species.genus, fishery.species.species FROM fishery.species  JOIN trawlers.p_lance ON fishery.species.id = trawlers.p_lance.id_species ORDER BY fishery.species.family, fishery.species.genus, fishery.species.species");
         while($row = pg_fetch_row($result)) {
-            if ($row[0] == $results[24]) {
+            if ($row[0] == $results[4]) {
                 print "<option value=\"$row[0]\" selected=\"selected\">".formatSpeciesFAO($row[1],$row[2],$row[3],$row[4],$row[5])."</option>";
             } else {
                 print "<option value=\"$row[0]\">".formatSpeciesFAO($row[1],$row[2],$row[3],$row[4],$row[5])."</option>";
@@ -352,6 +367,11 @@ if ($_GET['action'] == 'map') {
             ?>
         </tr>
     </table>
+    <br/>
+    <b>Remarques</b>
+    <br/>
+    <textarea cols="30" rows="5" name="comment"><?php echo $results[24];?></textarea>
+    <br/>
     <br/>
     <input type="hidden" value="<?php echo $results[0]; ?>" name="id"/>
     <input type="submit" value="Enregistrer" name="submit"/>
@@ -401,29 +421,30 @@ if ($_POST['submit'] == "Enregistrer") {
     $c4_poi = $_POST['c4_poi'];
     $c5_poi = $_POST['c5_poi'];
     $c6_poi = $_POST['c6_poi'];
+    $comment = $_POST['comment'];
 
     $q_id = "SELECT id FROM trawlers.route WHERE maree = '$maree' AND lance = '$lance'";
     $id_route = pg_fetch_row(pg_query($q_id))[0];
 
     if ($_POST['new_old']) {
         $query = "INSERT INTO trawlers.p_lance "
-            . "(datetime, username, id_route, maree, lance, id_species, c0_cre, c1_cre, c2_cre, c3_cre, c4_cre, c5_cre, c6_cre, c7_cre, c8_cre, c9_cre, c0_poi, c1_poi, c2_poi, c3_poi, c4_poi, c5_poi, c6_poi) "
-            . "VALUES (now(), '$username', '$id_route', '$maree', '$lance', '$id_species', '$c0_cre', '$c1_cre', '$c2_cre', '$c3_cre', '$c4_cre', '$c5_cre', '$c6_cre', '$c7_cre', '$c8_cre', '$c9_cre', '$c0_poi', '$c1_poi', '$c2_poi', '$c3_poi', '$c4_poi', '$c5_poi', '$c6_poi')";
-
+            . "(datetime, username, id_route, maree, lance, id_species, c0_cre, c1_cre, c2_cre, c3_cre, c4_cre, c5_cre, c6_cre, c7_cre, c8_cre, c9_cre, c0_poi, c1_poi, c2_poi, c3_poi, c4_poi, c5_poi, c6_poi, comment) "
+            . "VALUES (now(), '$username', '$id_route', '$maree', '$lance', '$id_species', '$c0_cre', '$c1_cre', '$c2_cre', '$c3_cre', '$c4_cre', '$c5_cre', '$c6_cre', '$c7_cre', '$c8_cre', '$c9_cre', '$c0_poi', '$c1_poi', '$c2_poi', '$c3_poi', '$c4_poi', '$c5_poi', '$c6_poi', '$comment')";
 
     } else {
         $query = "UPDATE trawlers.p_lance SET "
             . "username = '$username', datetime = now(), "
-            . "id_route = '".$id_route."', maree = '".$maree."', lance = '".$lance."', "
+            . "id_route = '".$id_route."', maree = '".$maree."', "
             . "lance = '".$lance."', id_species = '".$id_species."', "
-            . "c0_cre = '".$c0_cre."', c1_cre = '".$c1_cre."', c2_cre = '".$c2_cre."', c3_cre = '".$c3_cre."', c4_cre = '".$c4_cre."', c5_cre = '".$c5_cre."', c6_cre = '".$c6_cre."', c7_cre = '".$c7_cre."', c8_cre = '".$c8_cre."', c9_cre = '".$c9_cre."', c0_poi = '".$c0_poi."', c1_poi = '".$c1_poi."', c2_poi = '".$c2_poi."', c3_poi = '".$c3_poi."', c4_poi = '".$c4_poi."', c5_poi = '".$c5_poi."', c6_poi = '".$c6_poi."' "
+            . "c0_cre = '".$c0_cre."', c1_cre = '".$c1_cre."', c2_cre = '".$c2_cre."', c3_cre = '".$c3_cre."', c4_cre = '".$c4_cre."', c5_cre = '".$c5_cre."', c6_cre = '".$c6_cre."', c7_cre = '".$c7_cre."', c8_cre = '".$c8_cre."', c9_cre = '".$c9_cre."', "
+            . "c0_poi = '".$c0_poi."', c1_poi = '".$c1_poi."', c2_poi = '".$c2_poi."', c3_poi = '".$c3_poi."', c4_poi = '".$c4_poi."', c5_poi = '".$c5_poi."', c6_poi = '".$c6_poi."', comment = '".$comment."' "
             . " WHERE id = '{".$_POST['id']."}'";
     }
 
     $query = str_replace('\'\'', 'NULL', $query);
 
     if(!pg_query($query)) {
-//        print $query;
+        print $query;
         msg_queryerror();
     } else {
         #print $query;

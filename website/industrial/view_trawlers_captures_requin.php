@@ -340,7 +340,7 @@ if ($_GET['action'] == 'map') {
     </select>
     <br/>
     <br/>
-    <b>Numero individue</b>
+    <b>Nombre d&apos;individus</b>
     <br/>
     <input type="text" size="5" name="n_ind" value="<?php echo $results[12]; ?>"/>
     <br/>

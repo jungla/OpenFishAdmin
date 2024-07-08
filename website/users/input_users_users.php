@@ -192,7 +192,6 @@ if (!$controllo) {
             print "<option value=\"$row[0]\" selected=\"selected\">".$row[1]."</option>";
         }
         print "</select></td></tr>";
-
     }
 
     print "</table>";
